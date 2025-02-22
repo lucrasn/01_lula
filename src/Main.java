@@ -6,6 +6,7 @@ public class Main {
         String[][] boletim = new String[1000][5];
         Scanner sc = new Scanner(System.in);
         boolean flagMain = true;
+        int count = 0; // Contador para checar se tem matérias cadastradas
 
         while (flagMain) {
             boolean flagSub = true;
@@ -33,9 +34,16 @@ public class Main {
                         System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia);
                         float freq = sc.nextFloat();
 
+                        count =+ 1; //teste
+
                         break;
                     case 2:
                         flagSub = false;
+                        if(count == 0){
+                            System.out.println("Nenhuma matéria cadastrada");
+                        } else {
+                            busca(boletim, count, sc);
+                        }
 
                         break;
                     case 3:
@@ -76,6 +84,36 @@ public class Main {
         }
         return String.join(" ", nmSeparado);
     }
+
+
+    /* Caso exista pelo menos 1 matéria cadastrada (else do case 2) a classe vai
+    solicitar o nome da matéria e buscar se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada
+    o usuário será informado e deverá informar uma disciplina cadastrada
+    Tambem irá printar todos os dados relacionados a disciplina
+     */
+    public static String busca(String boletim[][], int count, Scanner sc) {
+
+        System.out.println("Digite o nome da matéria a ser consultada");
+        String consulta = sc.nextLine();
+        consulta = materiaFormated(consulta);
+
+        boolean cadastrada = false;
+        for (int i = 0; i < count; i++) {
+            if (boletim[i][0].equalsIgnoreCase(consulta)) {
+                System.out.println("Matéria: " + boletim[i][0]);
+                System.out.println("Nota 1: " + boletim[i][1]);
+                System.out.println("Nota 2: " + boletim[i][2]);
+                System.out.println("Frequência: " + boletim[i][3] + "%");
+                System.out.println("Status: " + boletim[i][4] + "\n");
+                cadastrada = true;
+            }
+        }
+        if (!cadastrada) {
+            System.out.println("Disciplina não encontrada");
+        }
+        return busca(boletim, count, sc);
+    }
+
 
     // Metodo para calcula a média da disciplina
     public static float mediaNotas(float n1, float n2) {
