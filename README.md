@@ -31,7 +31,7 @@ Foram implementadas funções auxiliares para modularizar o código:
 
 ## 🤝 Colaboradores  
 
-- [lucasn](https://github.com/lucasn)  
+- [lucrasn](https://github.com/lucrasn)  
 - [allangrm](https://github.com/allangrm)  
 
 ## 🎓 Professor  
