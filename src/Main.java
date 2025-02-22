@@ -12,11 +12,12 @@ public class Main {
             while (flagSub) {
                 menu();
                 int opcao = sc.nextInt();
+                sc.nextLine();
 
                 switch (opcao) {
                     case 1:
                         flagSub = false;
-                        System.out.print("Digite o nome da materia: ");
+                        System.out.println("Digite o nome da materia: ");
                         String materia = sc.nextLine();
                         materia = materiaFormated(materia);
                         System.out.println(materia);
