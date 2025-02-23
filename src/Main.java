@@ -5,59 +5,67 @@ public class Main {
     public static void main(String[] args) {
         String[][] boletim = new String[1000][5];
         Scanner sc = new Scanner(System.in);
-        boolean flagMain = true;
+        boolean flag = true;
         int count = 0; // Contador para checar se tem matérias cadastradas
 
-        while (flagMain) {
-            boolean flagSub = true;
+        while (flag) {
+            menu();
+            System.out.print("Digite o número correspondente: ");
+            int opcao = sc.nextInt();
+            sc.nextLine(); // Sabe Allan vou precisar ver o vídeo que tu viu para eu entender o porquê disso
 
-            while (flagSub) {
-                menu();
-                System.out.print("Digite o número correspondente: ");
-                int opcao = sc.nextInt();
-                sc.nextLine(); // Sabe Allan vou precisar ver o vídeo que tu viu para eu entender o porquê disso
+            switch (opcao) {
+                case 1:
+                    System.out.print("\nDigite o nome da materia: "); // nome da materia
+                    String materia = sc.nextLine();
+                    boletim[count][0] = materia = materiaFormated(materia);
 
-                switch (opcao) {
-                    case 1:
-                        flagSub = false;
+                    System.out.print("Digite a nota da 1ª unidade: "); // nota 1
+                    float nt1 = sc.nextFloat();
+                    boletim[count][1] = String.format("%.1f", nt1);
 
-                        System.out.print("Digite o nome da materia: ");
-                        String materia = sc.nextLine();
-                        materia = materiaFormated(materia);
+                    System.out.print("Digite a nota da 2ª unidade: "); // nota 2
+                    float nt2 = sc.nextFloat();
+                    boletim[count][2] = String.format("%.1f", nt2);
 
-                        System.out.print("Digite a nota da 1ª unidade: ");
-                        float nt1 = sc.nextFloat();
+                    System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia); // frequência
+                    float freq = sc.nextFloat();
+                    boletim[count][3] = String.format("%.0f", freq);
 
-                        System.out.print("Digite a nota da 2ª unidade: ");
-                        float nt2 = sc.nextFloat();
+                    System.out.print("\n"); // para ficar bntinho
 
-                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia);
-                        float freq = sc.nextFloat();
+                    String status = determinarStatus(mediaNotas(nt1, nt2), freq); // Status
+                    boletim[count][4] = status;
 
-                        count =+ 1; //teste
+                    count++;
+                    break;
+                case 2:
+                    if (count == 0) {
+                        System.out.println("\nNenhuma matéria cadastrada!\n");
+                    } else {
+                        /*Eu aprendi que um metodo/função so deve fazer aquilo, e somente aquilo, que ele se propõe a fazer,
+                        * daí como o metodo de buscaEspecifica se propõe a buscar ele não precisa perguntar o que procurar também.
+                        * Essa parada é uma boa pratica tlgd, por isso tirei isso de lá de dentro*/
+                        System.out.print("Digite o nome da matéria a ser consultada: ");
+                        String consulta = sc.nextLine();
+                        consulta = materiaFormated(consulta);
 
-                        break;
-                    case 2:
-                        flagSub = false;
-                        if(count == 0){
-                            System.out.println("Nenhuma matéria cadastrada");
-                        } else {
-                            busca(boletim, count, sc);
-                        }
-
-                        break;
-                    case 3:
-                        flagSub = false;
-
-                        break;
-                    case 4:
-                        flagSub = false;
-                        flagMain = false;
-                        break;
-                    default:
-                        System.out.println("Opção inválida, tente novamente\n");
-                }
-
+                        buscaEspecifica(boletim, count, consulta);
+                    }
+                    break;
+                case 3:
+                    if (count == 0) {
+                        System.out.println("\nNenhuma matéria cadastrada!\n");
+                    } else {
+                        buscaAll(boletim, count);
+                    }
+                    break;
+                case 4:
+                    System.out.println("\nAté a próxima!\n");
+                    flag = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida, tente novamente!\n");
             }
         }
     }
@@ -74,9 +82,9 @@ public class Main {
         nm = nm.toLowerCase();
         String[] nmSeparado = nm.split(" ");
         /*Ele não tava deixando a letra maiúscula antes porque quando a gente faz "for (String name : nmSeparado)"
-        * esse "name" não vai ser de fato cada elemento do array, mas sim uma cópia.
-        * Então a gente até botava a primeira letra maiúscula mas a informação se perdia porque a gente não tava explicitamente
-        * alterando os elementos do array! Por isso tive q mudar o raciocínio um pouco.*/
+        esse "name" não vai ser de fato cada elemento do array, mas sim uma cópia.
+        Então a gente até botava a primeira letra maiúscula mas a informação se perdia porque a gente não tava explicitamente
+        alterando os elementos do array! Por isso tive q mudar o raciocínio um pouco.*/
         for (int i = 0; i < nmSeparado.length; i++) {
             if (!nmSeparado[i].isEmpty()) { // Nunca se sabe
                 nmSeparado[i] = nmSeparado[i].substring(0, 1).toUpperCase() + nmSeparado[i].substring(1);
@@ -85,50 +93,59 @@ public class Main {
         return String.join(" ", nmSeparado);
     }
 
+    // Metodo para calcula a média da disciplina
+    public static float mediaNotas(float n1, float n2) {
+        return (n1 + n2) / 2;
+    }
 
-    /* Caso exista pelo menos 1 matéria cadastrada (else do case 2) a classe vai
-    solicitar o nome da matéria e buscar se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada
-    o usuário será informado e deverá informar uma disciplina cadastrada
-    Tambem irá printar todos os dados relacionados a disciplina
-     */
-    public static String busca(String boletim[][], int count, Scanner sc) {
+    // Metodo para determinar o status da disciplina
+    public static String determinarStatus(float media, float f) {
+        if (f >= 75) {
+            if (media >= 7) {
+                return "Aprovado";
+            } else if (media > 4) {
+                return "Recuperação";
+            } else {
+                return "Reprovado por nota";
+            }
+        } else {
+            return "Reprovado por falta";
+        }
+    }
 
-        System.out.println("Digite o nome da matéria a ser consultada");
-        String consulta = sc.nextLine();
-        consulta = materiaFormated(consulta);
+    // Metodo de formatação de como será mostrada as materias
+    public static void formatMaterias(String[][] boletim, int i) {
+        System.out.println("\nMatéria: " + boletim[i][0]);
+        System.out.println("Nota 1: " + boletim[i][1]);
+        System.out.println("Nota 2: " + boletim[i][2]);
+        System.out.println("Frequência: " + boletim[i][3] + "%");
+        System.out.println("Status: " + boletim[i][4] + "\n");
+    }
+
+    // Metodo para buscar uma disciplina especifica
+    public static void buscaEspecifica(String[][] boletim, int count, String consulta) {
+        // Eu transformei esse metodo em void pq ele so printa, n precisa retornar nada
+        /*Caso exista pelo menos 1 matéria cadastrada (else do case 2) a classe vai solicitar o nome da matéria e buscar
+        se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada o usuário será informado e deverá
+        informar uma disciplina cadastrada.
+        Também irá printar todos os dados relacionados a disciplina.*/
 
         boolean cadastrada = false;
         for (int i = 0; i < count; i++) {
             if (boletim[i][0].equalsIgnoreCase(consulta)) {
-                System.out.println("Matéria: " + boletim[i][0]);
-                System.out.println("Nota 1: " + boletim[i][1]);
-                System.out.println("Nota 2: " + boletim[i][2]);
-                System.out.println("Frequência: " + boletim[i][3] + "%");
-                System.out.println("Status: " + boletim[i][4] + "\n");
+                formatMaterias(boletim, i);
                 cadastrada = true;
             }
         }
         if (!cadastrada) {
             System.out.println("Disciplina não encontrada");
         }
-        return busca(boletim, count, sc);
     }
 
-
-    // Metodo para calcula a média da disciplina
-    public static float mediaNotas(float n1, float n2) {
-        return (n1 + n2) / 2;
+    // Metodo para buscar todas as disciplinas
+    public static void buscaAll(String[][] boletim, int count) {
+        for (int i = 0; i < count; i++) {
+            formatMaterias(boletim, i);
+        }
     }
-
-    // Metodo para formatar a frequência
-//    public static float freqFormated(float f) {
-//
-//    }
-
-    // Metodo para determinar o status da disciplina
-//    public static String determinarStatus(float media, float f) {
-//        if (f >= 75) {
-//
-//        }
-//    }
 }
