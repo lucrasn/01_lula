@@ -68,6 +68,7 @@ public class Main {
                     System.out.println("Opção inválida, tente novamente!\n");
             }
         }
+        sc.close();
     }
 
     // Metodo para escrever a menu
