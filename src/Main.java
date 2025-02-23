@@ -82,9 +82,9 @@ public class Main {
         nm = nm.toLowerCase();
         String[] nmSeparado = nm.split(" ");
         /*Ele não tava deixando a letra maiúscula antes porque quando a gente faz "for (String name : nmSeparado)"
-        esse "name" não vai ser de fato cada elemento do array, mas sim uma cópia.
-        Então a gente até botava a primeira letra maiúscula mas a informação se perdia porque a gente não tava explicitamente
-        alterando os elementos do array! Por isso tive q mudar o raciocínio um pouco.*/
+        * esse "name" não vai ser de fato cada elemento do array, mas sim uma cópia.
+        * Então a gente até botava a primeira letra maiúscula mas a informação se perdia porque a gente não tava explicitamente
+        * alterando os elementos do array! Por isso tive q mudar o raciocínio um pouco.*/
         for (int i = 0; i < nmSeparado.length; i++) {
             if (!nmSeparado[i].isEmpty()) { // Nunca se sabe
                 nmSeparado[i] = nmSeparado[i].substring(0, 1).toUpperCase() + nmSeparado[i].substring(1);
@@ -93,7 +93,7 @@ public class Main {
         return String.join(" ", nmSeparado);
     }
 
-    // Metodo para calcula a média da disciplina
+    // Metodo para calcular a média da disciplina
     public static float mediaNotas(float n1, float n2) {
         return (n1 + n2) / 2;
     }
@@ -126,9 +126,9 @@ public class Main {
     public static void buscaEspecifica(String[][] boletim, int count, String consulta) {
         // Eu transformei esse metodo em void pq ele so printa, n precisa retornar nada
         /*Caso exista pelo menos 1 matéria cadastrada (else do case 2) a classe vai solicitar o nome da matéria e buscar
-        se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada o usuário será informado e deverá
-        informar uma disciplina cadastrada.
-        Também irá printar todos os dados relacionados a disciplina.*/
+        * se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada o usuário será informado e deverá
+        * informar uma disciplina cadastrada.
+        * Também irá printar todos os dados relacionados a disciplina.*/
 
         boolean cadastrada = false;
         for (int i = 0; i < count; i++) {
