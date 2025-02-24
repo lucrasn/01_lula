@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 // Programa para Gerenciar as Disciplinas
-public class Main {
+public class GerenciadorBase {
     public static void main(String[] args) {
         String[][] boletim = new String[1000][5];
         Scanner sc = new Scanner(System.in);
