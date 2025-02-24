@@ -17,7 +17,7 @@ public class GerenciadorBase {
             menu();
             System.out.print("Digite o número correspondente: ");
             int opcao = sc.nextInt();
-            sc.nextLine(); // Sabe Allan vou precisar ver o vídeo que tu viu para eu entender o porquê disso
+            sc.nextLine();
 
             switch (opcao) {
                 case 1:
@@ -54,9 +54,6 @@ public class GerenciadorBase {
                     if (count == 0) {
                         System.out.println("\nNenhuma matéria cadastrada!\n");
                     } else {
-                        /*Eu aprendi que um metodo/função so deve fazer aquilo, e somente aquilo, que ele se propõe a fazer,
-                        * daí como o metodo de buscaEspecifica se propõe a buscar ele não precisa perguntar o que procurar também.
-                        * Essa parada é uma boa pratica tlgd, por isso tirei isso de lá de dentro*/
                         System.out.print("Digite o nome da matéria a ser consultada: ");
                         String consulta = sc.nextLine();
                         consulta = formatName(consulta);
@@ -93,10 +90,7 @@ public class GerenciadorBase {
     public static String formatName(String nm) {
         nm = nm.toLowerCase();
         String[] nmSeparado = nm.split(" ");
-        /*Ele não tava deixando a letra maiúscula antes porque quando a gente faz "for (String name : nmSeparado)"
-        * esse "name" não vai ser de fato cada elemento do array, mas sim uma cópia.
-        * Então a gente até botava a primeira letra maiúscula mas a informação se perdia porque a gente não tava explicitamente
-        * alterando os elementos do array! Por isso tive q mudar o raciocínio um pouco.*/
+
         for (int i = 0; i < nmSeparado.length; i++) {
             if (!nmSeparado[i].isEmpty()) { // Nunca se sabe
                 nmSeparado[i] = nmSeparado[i].substring(0, 1).toUpperCase() + nmSeparado[i].substring(1);
@@ -155,13 +149,7 @@ public class GerenciadorBase {
 
     // Metodo para buscar uma disciplina especifica
     public static void buscaEspecifica(String[][] boletim, int count, String consulta) {
-        // Eu transformei esse metodo em void pq ele so printa, n precisa retornar nada
-        /*Caso exista pelo menos 1 matéria cadastrada (else do case 2) a classe vai solicitar o nome da matéria e buscar
-        * se ela foi adicionada anteriormente, caso a matéria não esteja cadastrada o usuário será informado e deverá
-        * informar uma disciplina cadastrada.
-        * Também irá printar todos os dados relacionados a disciplina.*/
-
-        // Como eu criei o metodo disciplinaExist eu tive que otimizar aqui também (to com insônia)
+        // Como eu criei o metodo disciplinaExist eu tive que otimizar aqui também
         Verify vy = disciplinaExist(boletim, count, consulta);
         if (vy.exist()) {
             formatView(boletim, vy.indice());
