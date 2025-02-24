@@ -1,10 +1,15 @@
 import java.util.Scanner;
+import java.util.Locale;
 
 // Programa para Gerenciar as Disciplinas
 public class GerenciadorBase {
     public static void main(String[] args) {
         String[][] boletim = new String[1000][5];
+        /*Então o Scanner por padrão, usa a configuração regional do sistema (locale) para interpretar números. Ou seja
+        * para colocar número decimais você deve colocar com ',', mas eu nasci em washington dc então setei como o
+        * padrão dos EUA pra utilizar '.' sem dar erro.*/
         Scanner sc = new Scanner(System.in);
+        sc.useLocale(Locale.US); // Se não sabe o quanto eu tive que pesquisar pra descobrir que o erro que tava dando era por causa do maldito '.'
         boolean flag = true;
         int count = 0; // Contador para checar se tem matérias cadastradas
 
