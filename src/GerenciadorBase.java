@@ -23,26 +23,32 @@ public class GerenciadorBase {
                 case 1:
                     System.out.print("\nDigite o nome da materia: "); // nome da materia
                     String materia = sc.nextLine();
-                    boletim[count][0] = materia = materiaFormated(materia);
+                    materia = materiaFormated(materia);
 
-                    System.out.print("Digite a nota da 1ª unidade: "); // nota 1
-                    float nt1 = sc.nextFloat();
-                    boletim[count][1] = String.format("%.1f", nt1);
+                    // Percebi a possibilidade da pessoa tentar adicionar uma materia que ja existe
+                    if (count == 0 || !disciplinaExist(boletim, count, materia).exist()) {
+                        boletim[count][0] = materia;
+                        System.out.print("Digite a nota da 1ª unidade: "); // nota 1
+                        float nt1 = sc.nextFloat();
+                        boletim[count][1] = String.format("%.1f", nt1);
 
-                    System.out.print("Digite a nota da 2ª unidade: "); // nota 2
-                    float nt2 = sc.nextFloat();
-                    boletim[count][2] = String.format("%.1f", nt2);
+                        System.out.print("Digite a nota da 2ª unidade: "); // nota 2
+                        float nt2 = sc.nextFloat();
+                        boletim[count][2] = String.format("%.1f", nt2);
 
-                    System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia); // frequência
-                    float freq = sc.nextFloat();
-                    boletim[count][3] = String.format("%.0f", freq);
+                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia); // frequência
+                        float freq = sc.nextFloat();
+                        boletim[count][3] = String.format("%.0f", freq);
 
-                    System.out.print("\n"); // para ficar bntinho
+                        System.out.print("\n"); // para ficar bntinho
 
-                    String status = determinarStatus(mediaNotas(nt1, nt2), freq); // Status
-                    boletim[count][4] = status;
+                        String status = determinarStatus(mediaNotas(nt1, nt2), freq); // Status
+                        boletim[count][4] = status;
 
-                    count++;
+                        count++;
+                    } else {
+                        System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
+                    }
                     break;
                 case 2:
                     if (count == 0) {
@@ -128,6 +134,25 @@ public class GerenciadorBase {
         System.out.println("Status: " + boletim[i][4] + "\n");
     }
 
+    // interessante que essa atividade ja me fez aprender cada coisa, no final tenho um monte de coisa pra estudar sobre o uso de 'record' agora
+    /*O record cria uma classe imutável rapidinho, com algumas funcionalidades padrões já.
+    * Criei para ser o retorno do metodo disciplinasExist, porque eu tava precisando de um retorno que tivesse dois tipos
+    * de informações diferentes (boolean, int).*/
+    public record Verify(boolean exist, int indice) {}
+
+    // Metodo para verificar se a disciplina ja existe
+    public static Verify disciplinaExist(String[][] boletim, int count, String consulta) {
+        for (int i = 0; i < count; i++) {
+            if (boletim[i][0].equalsIgnoreCase(consulta)) {
+                return new Verify(true, i);
+            }
+        }
+        /*Se ele não encontrar, teoricamente, eu nem preciso do índice. Por isso, fiquei com aquela gosto de gambiarra
+        * na boca quando fiz o índice ser o count, mas como eu fiz o Verify que é uma classe eu não posso deixar nenhum
+        * parâmetro vazio*/
+        return new Verify(false, count);
+    }
+
     // Metodo para buscar uma disciplina especifica
     public static void buscaEspecifica(String[][] boletim, int count, String consulta) {
         // Eu transformei esse metodo em void pq ele so printa, n precisa retornar nada
@@ -136,15 +161,12 @@ public class GerenciadorBase {
         * informar uma disciplina cadastrada.
         * Também irá printar todos os dados relacionados a disciplina.*/
 
-        boolean cadastrada = false;
-        for (int i = 0; i < count; i++) {
-            if (boletim[i][0].equalsIgnoreCase(consulta)) {
-                formatMaterias(boletim, i);
-                cadastrada = true;
-            }
-        }
-        if (!cadastrada) {
-            System.out.println("Disciplina não encontrada");
+        // Como eu criei o metodo disciplinaExist eu tive que otimizar aqui também (to com insônia)
+        Verify vy = disciplinaExist(boletim, count, consulta);
+        if (vy.exist()) {
+            formatMaterias(boletim, vy.indice());
+        } else {
+            System.out.println("\nDisciplina não cadastrada!\n");
         }
     }
 
