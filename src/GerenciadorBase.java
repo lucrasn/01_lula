@@ -23,7 +23,7 @@ public class GerenciadorBase {
                 case 1:
                     System.out.print("\nDigite o nome da materia: "); // nome da materia
                     String materia = sc.nextLine();
-                    materia = materiaFormated(materia);
+                    materia = formatName(materia);
 
                     // Percebi a possibilidade da pessoa tentar adicionar uma materia que ja existe
                     if (count == 0 || !disciplinaExist(boletim, count, materia).exist()) {
@@ -59,7 +59,7 @@ public class GerenciadorBase {
                         * Essa parada é uma boa pratica tlgd, por isso tirei isso de lá de dentro*/
                         System.out.print("Digite o nome da matéria a ser consultada: ");
                         String consulta = sc.nextLine();
-                        consulta = materiaFormated(consulta);
+                        consulta = formatName(consulta);
 
                         buscaEspecifica(boletim, count, consulta);
                     }
@@ -90,7 +90,7 @@ public class GerenciadorBase {
     }
     
     // Metodo para formatar o nome da materia
-    public static String materiaFormated(String nm) {
+    public static String formatName(String nm) {
         nm = nm.toLowerCase();
         String[] nmSeparado = nm.split(" ");
         /*Ele não tava deixando a letra maiúscula antes porque quando a gente faz "for (String name : nmSeparado)"
@@ -126,7 +126,7 @@ public class GerenciadorBase {
     }
 
     // Metodo de formatação de como será mostrada as materias
-    public static void formatMaterias(String[][] boletim, int i) {
+    public static void formatView(String[][] boletim, int i) {
         System.out.println("\nMatéria: " + boletim[i][0]);
         System.out.println("Nota 1: " + boletim[i][1]);
         System.out.println("Nota 2: " + boletim[i][2]);
@@ -164,7 +164,7 @@ public class GerenciadorBase {
         // Como eu criei o metodo disciplinaExist eu tive que otimizar aqui também (to com insônia)
         Verify vy = disciplinaExist(boletim, count, consulta);
         if (vy.exist()) {
-            formatMaterias(boletim, vy.indice());
+            formatView(boletim, vy.indice());
         } else {
             System.out.println("\nDisciplina não cadastrada!\n");
         }
@@ -173,7 +173,7 @@ public class GerenciadorBase {
     // Metodo para buscar todas as disciplinas
     public static void buscaAll(String[][] boletim, int count) {
         for (int i = 0; i < count; i++) {
-            formatMaterias(boletim, i);
+            formatView(boletim, i);
         }
     }
 }
