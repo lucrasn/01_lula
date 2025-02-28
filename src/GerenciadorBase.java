@@ -1,17 +1,14 @@
 import java.util.Scanner;
 import java.util.Locale;
 
+
 // Programa para Gerenciar as Disciplinas
 public class GerenciadorBase {
     public static void main(String[] args) {
         String[][] boletim = new String[1000][5];
-        /*Então o Scanner por padrão, usa a configuração regional do sistema (locale) para interpretar números. Ou seja
-        * para colocar número decimais você deve colocar com ',', mas eu nasci em washington dc então setei como o
-        * padrão dos EUA pra utilizar '.' sem dar erro.*/
-        Scanner sc = new Scanner(System.in);
-        sc.useLocale(Locale.US); // Se não sabe o quanto eu tive que pesquisar pra descobrir que o erro que tava dando era por causa do maldito '.'
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
         boolean flag = true;
-        int count = 0; // Contador para checar se tem matérias cadastradas
+        int count = 0;
 
         while (flag) {
             menu();
@@ -25,7 +22,6 @@ public class GerenciadorBase {
                     String materia = sc.nextLine();
                     materia = formatName(materia);
 
-                    // Percebi a possibilidade da pessoa tentar adicionar uma materia que ja existe
                     if (count == 0 || !disciplinaExist(boletim, count, materia).exist()) {
                         boletim[count][0] = materia;
                         System.out.print("Digite a nota da 1ª unidade: "); // nota 1
@@ -40,7 +36,7 @@ public class GerenciadorBase {
                         float freq = sc.nextFloat();
                         boletim[count][3] = String.format("%.0f", freq);
 
-                        System.out.print("\n"); // para ficar bntinho
+                        System.out.print("\n");
 
                         String status = determinarStatus(mediaNotas(nt1, nt2), freq); // Status
                         boletim[count][4] = status;
@@ -128,10 +124,7 @@ public class GerenciadorBase {
         System.out.println("Status: " + boletim[i][4] + "\n");
     }
 
-    // interessante que essa atividade ja me fez aprender cada coisa, no final tenho um monte de coisa pra estudar sobre o uso de 'record' agora
-    /*O record cria uma classe imutável rapidinho, com algumas funcionalidades padrões já.
-    * Criei para ser o retorno do metodo disciplinasExist, porque eu tava precisando de um retorno que tivesse dois tipos
-    * de informações diferentes (boolean, int).*/
+    // Classe para servir de tupla (boolena, int)
     public record Verify(boolean exist, int indice) {}
 
     // Metodo para verificar se a disciplina ja existe
@@ -141,15 +134,12 @@ public class GerenciadorBase {
                 return new Verify(true, i);
             }
         }
-        /*Se ele não encontrar, teoricamente, eu nem preciso do índice. Por isso, fiquei com aquela gosto de gambiarra
-        * na boca quando fiz o índice ser o count, mas como eu fiz o Verify que é uma classe eu não posso deixar nenhum
-        * parâmetro vazio*/
+
         return new Verify(false, count);
     }
 
     // Metodo para buscar uma disciplina especifica
     public static void buscaEspecifica(String[][] boletim, int count, String consulta) {
-        // Como eu criei o metodo disciplinaExist eu tive que otimizar aqui também
         Verify vy = disciplinaExist(boletim, count, consulta);
         if (vy.exist()) {
             formatView(boletim, vy.indice());

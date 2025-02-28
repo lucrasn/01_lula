@@ -2,8 +2,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 
-// Programa para Gerenciar as Disciplinas Avançado
-public class GerenciadorAvancado {
+// Programa para Gerenciar as Disciplinas Avançado (Diferente Versão)
+public class GerenciadorAvancadoAnother {
     public static void main(String[] args) {
         String[][] boletim = new String[1000][5];
         Scanner sc = new Scanner(System.in);
@@ -23,7 +23,7 @@ public class GerenciadorAvancado {
                     String materia = sc.nextLine();
                     materia = formatName(materia);
 
-                    if (count == 0 || !disciplinaExist(boletim, materia, count).exist()) {
+                    if (count == 0 || !disciplinaExist(boletim, materia, count, opcao)) {
                         boletim[count][0] = materia;
                         System.out.print("Digite a nota da 1ª unidade: "); // nota 1
                         float nt1 = sc.nextFloat();
@@ -120,32 +120,35 @@ public class GerenciadorAvancado {
                 "\nFrequência: " + boletim[i][3] + "%" + "\nStatus: " + boletim[i][4] + "\n\n";
     }
 
-    // Classe para servir de tupla (boolena, int)
-    public record Verify(boolean exist, int indice) {}
-
-    // Metodo para verificar se a disciplina ja existe
-    public static Verify disciplinaExist(String[][] boletim , String consulta, int count) {
+    // Metodo para verifica se a disciplina existe SUPORTE
+    public static boolean disciplinaExist(String[][] boletim , String consulta, int count) {
         return disciplinaExist(boletim, consulta, count, 0);
     }
 
-    // Metodo para verificar se a disciplina ja existe RECURSIVA
-    public static Verify disciplinaExist(String[][] boletim , String consulta, int count, int i) {
+    // Metodo para verifica se a disciplina existe RECURSIVA
+    public static boolean disciplinaExist(String[][] boletim , String consulta, int count, int i) {
         if (count == i) {
-            return new Verify(false, count);
+            return false;
         } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
-            return new Verify(true, i);
+            return true;
         } else {
             return disciplinaExist(boletim, consulta, count, i + 1);
         }
     }
 
-    // Metodo para buscar uma disciplina especifica
+    // Metodo para procurar pela disciplina consultada SUPORTE
     public static String buscaEspecifica(String[][] boletim , String consulta, int count) {
-        Verify vy = disciplinaExist(boletim, consulta, count);
-        if (!vy.exist()) {
+        return buscaEspecifica(boletim, consulta, count, 0);
+    }
+
+    // Metodo para procurar pela disciplina consultada RECURSIVA
+    public static String buscaEspecifica(String[][] boletim , String consulta, int count, int i) {
+        if (count == i) {
             return "\nDisciplina não cadastrada!\n";
+        } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
+            return formatView(boletim, i);
         } else {
-            return formatView(boletim, vy.indice());
+            return buscaEspecifica(boletim, consulta, count, i + 1);
         }
     }
 
