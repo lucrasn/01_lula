@@ -1,11 +1,15 @@
 import java.util.Locale;
 import java.util.Scanner;
+import java.io.*;
 
 
 // Programa para Gerenciar as Disciplinas Avançado
 public class GerenciadorAvancado {
-    public static void main(String[] args) {
-        String[][] boletim = new String[1000][5];
+    static final int MAX_DISCIPLINAS = 1000;
+    static final String DELIMITADOR = ";";
+
+    public static void main(String[] args) throws IOException {
+        String[][] boletim = new String[MAX_DISCIPLINAS][5];
         Scanner sc = new Scanner(System.in);
         sc.useLocale(Locale.US);
         boolean flag = true;
