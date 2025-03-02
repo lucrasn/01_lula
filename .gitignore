@@ -30,3 +30,6 @@ bin/
 
 ### Google Drive ###
 *.ini
+
+### Histórico do Boletim ###
+historico/
