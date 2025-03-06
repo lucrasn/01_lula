@@ -1,7 +1,5 @@
-import java.util.Scanner;
-import java.util.Locale;
 import java.io.*;
-
+import javax.swing.*;
 
 // Programa para Gerenciar as Disciplinas Avançado (Diferente Versão)
 public class GerenciadorAvancadoAnother {
@@ -10,8 +8,7 @@ public class GerenciadorAvancadoAnother {
     static final String PATH = "historico/boletim.txt";
     static final String DELIMITADOR = ";";
 
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
+    public static void main(String[] args) {
         String[][] boletim = new String[MAX_DISCIPLINAS][QTD_ATRIBUTOS];
         int count = 0;
 
@@ -24,61 +21,58 @@ public class GerenciadorAvancadoAnother {
             }
 
         } catch (IOException e) {
-            System.out.println("\nOcorreu um erro ao ler o historico: " + e.getMessage() + "\n");
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao ler o historico: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
         boolean flag = true;
         while (flag) {
-            menu();
-            System.out.print("Digite o número correspondente: ");
-            int opcao = sc.nextInt();
-            sc.nextLine();
+            JOptionPane.showMessageDialog(null, menu(), "Menu", JOptionPane.INFORMATION_MESSAGE);
+            String opcaoStr = JOptionPane.showInputDialog("Digite o número correspondente: ");
+            int opcao = Integer.parseInt(opcaoStr);
 
             switch (opcao) {
                 case 1:
-                    System.out.print("\nDigite o nome da materia: "); // nome da materia
-                    String materia = sc.nextLine();
+                    String materia = JOptionPane.showInputDialog("Digite o nome da materia: "); // nome da materia
                     materia = formatName(materia);
 
                     if (count == 0 || !disciplinaExist(boletim, materia, count, opcao)) {
                         boletim[count][0] = materia;
-                        System.out.print("Digite a nota da 1ª unidade: "); // nota 1
-                        float nt1 = sc.nextFloat();
+
+                        String nt1Str = JOptionPane.showInputDialog("Digite a nota da 1ª unidade: "); // nota 1
+                        float nt1 = Float.parseFloat(nt1Str);
                         boletim[count][1] = String.format("%.1f", nt1);
 
-                        System.out.print("Digite a nota da 2ª unidade: "); // nota 2
-                        float nt2 = sc.nextFloat();
+                        String nt2Str = JOptionPane.showInputDialog("Digite a nota da 2ª unidade: "); // nota 2
+                        float nt2 = Float.parseFloat(nt2Str);
                         boletim[count][2] = String.format("%.1f", nt2);
 
-                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia); // frequência
-                        float freq = sc.nextFloat();
+                        String mensagem = String.format("Qual foi a sua frequência em %s? [0 a 100] ", materia);
+                        String freqStr = JOptionPane.showInputDialog(mensagem); // frequência
+                        float freq = Float.parseFloat(freqStr);
                         boletim[count][3] = String.format("%.0f", freq);
-
-                        System.out.print("\n");
 
                         String status = determinarStatus(mediaNotas(nt1, nt2), freq); // Status
                         boletim[count][4] = status;
 
                         count++;
                     } else {
-                        System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
+                        JOptionPane.showMessageDialog(null, "Disciplina já cadastrada! Tente a opção 2", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 case 2:
                     if (count == 0) {
-                        System.out.println("\nNenhuma matéria cadastrada!\n");
+                        JOptionPane.showMessageDialog(null, "Nenhuma matéria cadastrada!", "Atenção!", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        System.out.print("Digite o nome da matéria a ser consultada: ");
-                        String consulta = sc.nextLine();
+                        String consulta = JOptionPane.showInputDialog(null, "Digite o nome da matéria a ser consultada: ", "Matéria?", JOptionPane.QUESTION_MESSAGE);
                         consulta = formatName(consulta);
-                        System.out.println(buscaEspecifica(boletim, consulta, count));
+                        JOptionPane.showMessageDialog(null, buscaEspecifica(boletim, consulta, count), "Resultado:", JOptionPane.INFORMATION_MESSAGE);
                     }
                     break;
                 case 3:
                     if (count == 0) {
-                        System.out.println("\nNenhuma matéria cadastrada!\n");
+                        JOptionPane.showMessageDialog(null, "Nenhuma matéria cadastrada!", "Aviso!", JOptionPane.QUESTION_MESSAGE);
                     } else {
-                        buscaAll(boletim, count);
+                        JOptionPane.showMessageDialog(null, buscaAll(boletim, count), "Resultado:", JOptionPane.INFORMATION_MESSAGE);
                     }
                     break;
                 case 4:
@@ -88,27 +82,30 @@ public class GerenciadorAvancadoAnother {
                             try {
                                 escreverNoTxt(boletim, count);
                             } catch (IOException e) {
-                                System.out.println("\nOcorreu um erro ao escrever no arquivo: " + e.getMessage());
+                                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao escrever no arquivo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                             }
                         } catch (IOException e) {
-                            System.out.println("\nOcorreu um erro ao criar o arquivo: " + e.getMessage());
+                            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao criar o arquivo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                    System.out.println("Até a próxima!");
+                    JOptionPane.showMessageDialog(null, "Até a próxima!", "Bye Bye", JOptionPane.PLAIN_MESSAGE);
                     flag = false;
                     break;
                 default:
-                    System.out.println("Opção inválida, tente novamente!\n");
+                    JOptionPane.showMessageDialog(null, "Opção inválida, tente novamente!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
-        sc.close();
     }
 
     // Metodo para escrever a menu
-    static void menu() {
-        System.out.println("----------  MENU  ----------");
-        System.out.println("[1] Adicionar Disciplina\n[2] Consultar Disciplina\n[3] Exibir Disciplinas\n[4] Sair");
-        System.out.println("----------------------------");
+    static String menu() {
+        return """
+                ----------  MENU  ----------
+                [1] Adicionar Disciplina
+                [2] Consultar Disciplina
+                [3] Exibir Disciplinas
+                [4] Sair
+                ----------------------------""";
     }
 
     // Metodo para formatar o nome da materia
@@ -149,11 +146,6 @@ public class GerenciadorAvancadoAnother {
                 "\nFrequência: " + boletim[i][3] + "%" + "\nStatus: " + boletim[i][4] + "\n\n";
     }
 
-    // Metodo para verifica se a disciplina existe SUPORTE
-    static boolean disciplinaExist(String[][] boletim , String consulta, int count) {
-        return disciplinaExist(boletim, consulta, count, 0);
-    }
-
     // Metodo para verifica se a disciplina existe RECURSIVA
     static boolean disciplinaExist(String[][] boletim , String consulta, int count, int i) {
         if (count == i) {
@@ -182,10 +174,12 @@ public class GerenciadorAvancadoAnother {
     }
 
     // Metodo para buscar todas as disciplinas
-    static void buscaAll(String[][] boletim, int count) {
+    static String buscaAll(String[][] boletim, int count) {
+        String historico = "";
         for (int i = 0; i < count; i++) {
-            System.out.print(formatView(boletim, i));
+            historico = formatView(boletim, i);
         }
+        return historico;
     }
 
     // Metodo para criação do arquivo txt
@@ -195,10 +189,10 @@ public class GerenciadorAvancadoAnother {
         File directory = archive.getParentFile();
         if (directory != null && !directory.exists()) directory.mkdirs();
 
-        if (archive.exists()) System.out.println("\nBoletim já existe!");
+        if (archive.exists()) JOptionPane.showMessageDialog(null, "Boletim já existe!", "Informe:", 2);
         else {
-            if (archive.createNewFile()) System.out.println("\nBoletim criado com sucesso!");
-            else System.out.println("\nErro ao criar o arquivo " + archive.getPath() + '.');
+            if (archive.createNewFile()) JOptionPane.showMessageDialog(null, "Boletim criado com sucesso!", "Informe:", 1);
+            else JOptionPane.showMessageDialog(null, "Erro ao criar o arquivo " + archive.getPath() + '.', "Erro:", 0);
         }
     }
 
@@ -217,7 +211,7 @@ public class GerenciadorAvancadoAnother {
             writer.newLine();
         }
 
-        System.out.println("Boletim escrito com sucesso!");
+        JOptionPane.showMessageDialog(null, "Boletim escrito com sucesso!");
         writer.close();
     }
 
@@ -228,7 +222,7 @@ public class GerenciadorAvancadoAnother {
         File archive = new File(PATH);
 
         if (archive.exists()) {
-            System.out.println("Arquivo de dados encontrado: " + archive.getCanonicalPath());
+            JOptionPane.showMessageDialog(null, "Arquivo de dados encontrado: " + archive.getCanonicalPath());
             BufferedReader reader = new BufferedReader(new FileReader(archive));
 
             String line;
