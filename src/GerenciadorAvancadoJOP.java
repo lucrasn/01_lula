@@ -2,7 +2,7 @@ import java.io.*;
 import javax.swing.*;
 
 // Programa para Gerenciar as Disciplinas Avançado (Diferente Versão)
-public class GerenciadorAvancadoAnother {
+public class GerenciadorAvancadoJOP {
     static final int MAX_DISCIPLINAS = 1000;
     static final int QTD_ATRIBUTOS = 5;
     static final String PATH = "historico/boletim.txt";
@@ -69,13 +69,6 @@ public class GerenciadorAvancadoAnother {
                     }
                     break;
                 case 3:
-                    if (count == 0) {
-                        JOptionPane.showMessageDialog(null, "Nenhuma matéria cadastrada!", "Aviso!", JOptionPane.QUESTION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, buscaAll(boletim, count), "Resultado:", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    break;
-                case 4:
                     if (count > 0 ) {
                         try {
                             criarTxt();
@@ -103,8 +96,7 @@ public class GerenciadorAvancadoAnother {
                 ----------  MENU  ----------
                 [1] Adicionar Disciplina
                 [2] Consultar Disciplina
-                [3] Exibir Disciplinas
-                [4] Sair
+                [3] Sair
                 ----------------------------""";
     }
 
@@ -163,7 +155,8 @@ public class GerenciadorAvancadoAnother {
     }
 
     // Metodo para procurar pela disciplina consultada RECURSIVA
-    static String buscaEspecifica(String[][] boletim , String consulta, int count, int i) {
+    static String buscaEspecifica(String[][]
+                                          boletim , String consulta, int count, int i) {
         if (count == i) {
             return "\nDisciplina não cadastrada!\n";
         } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
@@ -173,15 +166,6 @@ public class GerenciadorAvancadoAnother {
         }
     }
 
-    // Metodo para buscar todas as disciplinas
-    static String buscaAll(String[][] boletim, int count) {
-        String historico = "";
-        for (int i = 0; i < count; i++) {
-            historico = formatView(boletim, i);
-        }
-        return historico;
-    }
-
     // Metodo para criação do arquivo txt
     static void criarTxt() throws IOException {
         File archive = new File(PATH);
@@ -189,10 +173,10 @@ public class GerenciadorAvancadoAnother {
         File directory = archive.getParentFile();
         if (directory != null && !directory.exists()) directory.mkdirs();
 
-        if (archive.exists()) JOptionPane.showMessageDialog(null, "Boletim já existe!", "Informe:", 2);
+        if (archive.exists()) JOptionPane.showMessageDialog(null, "Boletim já existe!", "Informe:", JOptionPane.WARNING_MESSAGE);
         else {
-            if (archive.createNewFile()) JOptionPane.showMessageDialog(null, "Boletim criado com sucesso!", "Informe:", 1);
-            else JOptionPane.showMessageDialog(null, "Erro ao criar o arquivo " + archive.getPath() + '.', "Erro:", 0);
+            if (archive.createNewFile()) JOptionPane.showMessageDialog(null, "Boletim criado com sucesso!", "Informe:", JOptionPane.INFORMATION_MESSAGE);
+            else JOptionPane.showMessageDialog(null, "Erro ao criar o arquivo " + archive.getPath() + '.', "Erro:", JOptionPane.ERROR_MESSAGE);
         }
     }
 
