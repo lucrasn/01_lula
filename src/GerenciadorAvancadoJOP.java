@@ -1,7 +1,7 @@
 import java.io.*;
 import javax.swing.*;
 
-// Programa para Gerenciar as Disciplinas Avançado (Diferente Versão)
+// Programa para Gerenciar as Disciplinas Avançado com JOP
 public class GerenciadorAvancadoJOP {
     static final int MAX_DISCIPLINAS = 1000;
     static final int QTD_ATRIBUTOS = 5;
@@ -35,7 +35,7 @@ public class GerenciadorAvancadoJOP {
                     String materia = JOptionPane.showInputDialog("Digite o nome da materia: "); // nome da materia
                     materia = formatName(materia);
 
-                    if (count == 0 || !disciplinaExist(boletim, materia, count, opcao)) {
+                    if (count == 0 || !disciplinaExist(boletim, materia, count)) {
                         boletim[count][0] = materia;
 
                         String nt1Str = JOptionPane.showInputDialog("Digite a nota da 1ª unidade: "); // nota 1
@@ -136,6 +136,11 @@ public class GerenciadorAvancadoJOP {
     static String formatView(String[][] boletim, int i) {
         return "\nMatéria: " + boletim[i][0] + "\nNota 1: " + boletim[i][1] + "\nNota 2: " + boletim[i][2] +
                 "\nFrequência: " + boletim[i][3] + "%" + "\nStatus: " + boletim[i][4] + "\n\n";
+    }
+
+    // Metodo para verifica se a disciplina existe RECURSIVA suport
+    static boolean disciplinaExist(String[][] boletim , String consulta, int count) {
+        return disciplinaExist(boletim, consulta, count, 0);
     }
 
     // Metodo para verifica se a disciplina existe RECURSIVA
