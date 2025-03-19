@@ -1,38 +1,56 @@
 package orientacao_a_objeto;
 
-import static orientacao_a_objeto.Formatacao.formatView;
-
 public class Busca {
+    private static String consulta;
+
     // Metodo para verifica se a disciplina existe RECURSIVA suport
-    static boolean disciplinaExist(String[][] boletim , String consulta, int count) {
-        return disciplinaExist(boletim, consulta, count, 0);
+    public static boolean disciplinaExist() {
+        return disciplinaExist(consulta, 0); //mudar para 0 dps
+        /*  tambem nao funcionava justamente por seu indice inicial ser 0 e tentar puxar o 1
+        *   tentei colocar o indice igual a 1 para o codigo rodar, mas nao dava pra
+        *   adicionar outra disciplina
+        */
     }
 
     // Metodo para verifica se a disciplina existe RECURSIVA
-    static boolean disciplinaExist(String[][] boletim , String consulta, int count, int i) {
-        if (count == i) {
+    public static boolean disciplinaExist(String consulta, int indice) {
+        if (Formatacao.getCount() == indice) {
             return false;
-        } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
+        } else if (Formatacao.getBoletim()[indice][0].equalsIgnoreCase(consulta)) {
             return true;
         } else {
-            return disciplinaExist(boletim, consulta, count, i + 1);
+            return disciplinaExist(consulta, indice + 1);
         }
     }
 
     // Metodo para procurar pela disciplina consultada SUPORTE
-    static String buscaEspecifica(String[][] boletim , String consulta, int count) {
-        return buscaEspecifica(boletim, consulta, count, 0);
+    public static String buscaEspecifica() {
+        return buscaEspecifica(consulta, 0);
     }
 
     // Metodo para procurar pela disciplina consultada RECURSIVA
-    static String buscaEspecifica(String[][]
-                                          boletim , String consulta, int count, int i) {
-        if (count == i) {
+    public static String buscaEspecifica(String consulta, int indice) {
+        if (Formatacao.getCount() == indice) {
             return "\nDisciplina não cadastrada!\n";
-        } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
-            return formatView(boletim, i);
+        } else if (Formatacao.getBoletim()[indice][0].equalsIgnoreCase(consulta)) {
+            return Formatacao.formatView(indice);
         } else {
-            return buscaEspecifica(boletim, consulta, count, i + 1);
+            return buscaEspecifica(consulta, indice + 1);
         }
+    }
+
+    // Metodo para buscar todas as disciplinas
+    public static void buscaAll() {
+        for (int i = 0; i < Formatacao.getCount(); i++) {
+            System.out.print(Formatacao.formatView(i));
+        }
+    }
+
+    public static String getConsulta() {
+        return consulta;
+    }
+
+    public static void setConsulta(String consulta) {
+        Busca.consulta = consulta;
     }
 }

@@ -3,29 +3,9 @@ package orientacao_a_objeto;
 import java.io.*;
 
 public class Txt {
-    private static final int MAX_DISCIPLINAS = 1000;
-    private static final int QTD_ATRIBUTOS = 5;
-    private static final String PATH = "historico/boletim.txt";
-    private static final String DELIMITADOR = ";";
 
-    public static int getMaxDisciplinas() {
-        return MAX_DISCIPLINAS;
-    }
-
-    public static int getQtdAtributos() {
-        return QTD_ATRIBUTOS;
-    }
-
-    public static String getDELIMITADOR() {
-        return DELIMITADOR;
-    }
-
-    public static String getPATH() {
-        return PATH;
-    }
-
-    public static void criarTxt() throws IOException {
-        File archive = new File(PATH);
+    public static void criarTxt(String path) throws IOException {
+        File archive = new File(path);
 
         File directory = archive.getParentFile();
         if (directory != null && !directory.exists()) directory.mkdirs();
@@ -38,14 +18,14 @@ public class Txt {
     }
 
     // Metodo para escrita no arquivo txt
-    public static void escreverNoTxt(String[][] boletim, int count) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(PATH));
+    public static void escreverNoTxt(String[][] boletim, int count, String delimitador, String path) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
         for (int i = 0; i < count; i++) {
-            String linha = boletim[i][0] + DELIMITADOR +
-                    boletim[i][1] + DELIMITADOR +
-                    boletim[i][2] + DELIMITADOR +
-                    boletim[i][3] + DELIMITADOR +
+            String linha = boletim[i][0] + delimitador +
+                    boletim[i][1] + delimitador +
+                    boletim[i][2] + delimitador +
+                    boletim[i][3] + delimitador +
                     boletim[i][4];
 
             writer.write(linha);
@@ -57,10 +37,10 @@ public class Txt {
     }
 
     // Metodo para leitura do arquivo txt
-    public static String[][] lerTxt() throws IOException {
-        String[][] historico = new String[MAX_DISCIPLINAS][QTD_ATRIBUTOS];
+    public static String[][] lerTxt(int maxDisciplinas, int atributes, String delimitador, String path) throws IOException {
+        String[][] historico = new String[maxDisciplinas][atributes];
         int count = 0;
-        File archive = new File(PATH);
+        File archive = new File(path);
 
         if (archive.exists()) {
             System.out.println("Arquivo de dados encontrado: " + archive.getCanonicalPath());
@@ -68,7 +48,7 @@ public class Txt {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] atributos = line.split(DELIMITADOR);
+                String[] atributos = line.split(delimitador);
 
                 historico[count][0] = atributos[0];
                 historico[count][1] = atributos[1];
@@ -85,9 +65,9 @@ public class Txt {
     }
 
     // Metodo para pegar a quantidade de linhas do arquivo txt
-    public static int qtdLines() throws IOException {
+    public static int qtdLines(String path) throws IOException {
         int count = 0;
-        File archive = new File(PATH);
+        File archive = new File(path);
 
         if (archive.exists()) {
             BufferedReader reader = new BufferedReader(new FileReader(archive));

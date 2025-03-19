@@ -33,7 +33,7 @@ public class Calculo {
                 return "Reprovado por nota";
             }
         } else {
-            return "Reprovado2 por falta";
+            return "Reprovado por falta";
         }
     }
 
