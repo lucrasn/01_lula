@@ -33,7 +33,6 @@ public class GerenciadorAvancadoOO {
 
             switch (opcao) {
                 case 1:
-                    Calculo dados;
                     System.out.print("\nDigite o nome da materia: "); // nome da materia
                     Formatacao materia = new Formatacao(Formatacao.formatName(sc.nextLine()));
 
@@ -42,27 +41,29 @@ public class GerenciadorAvancadoOO {
                         Formatacao.getBoletim()[Formatacao.getCount()][0] = materia.getNomeMateria(); // iniciava como 1 automaticamente -> count ++
                         System.out.print("Digite a nota da 1ª unidade: "); // nota 1
                         float nt1 = sc.nextFloat();
+                        Calculo.setNota1(nt1);
 
                         System.out.print("Digite a nota da 2ª unidade: "); // nota 2
                         float nt2 = sc.nextFloat();
+                        Calculo.setNota2(nt2);
 
                         System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia.getNomeMateria()); // frequência
                         float freq = sc.nextFloat();
+                        Calculo.setFreq(freq);
 
                         System.out.print("\n");
-                        dados = new Calculo(nt1, nt2, freq);
 
-                        String status = dados.determinarStatus(dados.mediaNotas(), freq);
+                        String status = Calculo.determinarStatus(Calculo.mediaNotas(), Calculo.getFreq());
 
-                        int pos = Formatacao.getCount();  // posição atual para inserir
+                        int pos = Formatacao.getCount();    // posição atual para inserir
                         Formatacao.getBoletim()[pos][0] = materia.getNomeMateria();
 
                         // Formatacao.getBoletim()[Formatacao.getCount()][3] -> getCount pegava posição 1
 
 
-                        Formatacao.getBoletim()[pos][1] = String.format("%.1f", dados.getNt1());
-                        Formatacao.getBoletim()[pos][2] = String.format("%.1f", dados.getNt2());
-                        Formatacao.getBoletim()[pos][3] = String.format("%.0f", dados.getFreq());
+                        Formatacao.getBoletim()[pos][1] = String.format("%.1f", Calculo.getNota1());
+                        Formatacao.getBoletim()[pos][2] = String.format("%.1f", Calculo.getNota2());
+                        Formatacao.getBoletim()[pos][3] = String.format("%.0f", Calculo.getFreq());
                         Formatacao.getBoletim()[pos][4] = status; // Status
 
                         Formatacao.incrementoCount();
