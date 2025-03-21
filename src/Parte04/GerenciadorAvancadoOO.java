@@ -1,10 +1,12 @@
-package orientacao_a_objeto;
+package Parte04;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
-// Programa para Gerenciar as Disciplinas Avançado OO
+/**
+ * Programa para Gerencias as Disciplinas Avançado O.O.
+ */
 public class GerenciadorAvancadoOO {
     private static final int MAX_DISCIPLINAS = 1000;
     private static final int QTD_ATRIBUTOS = 5;
@@ -13,12 +15,11 @@ public class GerenciadorAvancadoOO {
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in).useLocale(Locale.US);
-        Formatacao.setBoletimClean(MAX_DISCIPLINAS, QTD_ATRIBUTOS);
-
+        Disciplina.setBoletimVazio(MAX_DISCIPLINAS, QTD_ATRIBUTOS);
 
         try {
-            Formatacao.setBoletim(Txt.lerTxt(MAX_DISCIPLINAS, QTD_ATRIBUTOS, DELIMITADOR, PATH));
-            Formatacao.setCount(Txt.qtdLines(PATH));
+            Disciplina.lerHistoricoBoletim(MAX_DISCIPLINAS, QTD_ATRIBUTOS, DELIMITADOR, PATH);
+            Disciplina.pegarLinhasHistoricoBoletim(PATH);
 
         } catch (IOException e) {
             System.out.println("\nOcorreu um erro ao ler o historico: " + e.getMessage() + "\n");
@@ -26,7 +27,7 @@ public class GerenciadorAvancadoOO {
 
         boolean flag = true;
         while (flag) {
-            Formatacao.menu();
+            menu();
             System.out.print("Digite o número correspondente: ");
             int opcao = sc.nextInt();
             sc.nextLine();
@@ -34,68 +35,47 @@ public class GerenciadorAvancadoOO {
             switch (opcao) {
                 case 1:
                     System.out.print("\nDigite o nome da materia: "); // nome da materia
-                    Formatacao materia = new Formatacao(Formatacao.formatName(sc.nextLine()));
+                    String m = Disciplina.formatarNomeMateria(sc.nextLine());
 
-                    Busca.setConsulta(materia.getNomeMateria());
-                    if (Formatacao.getCount() == 0 || !Busca.disciplinaExist()) {
-                        Formatacao.getBoletim()[Formatacao.getCount()][0] = materia.getNomeMateria(); // iniciava como 1 automaticamente -> count ++
+                    if (Disciplina.getCount() == 0 || !Disciplina.materiaExiste(m)) {
                         System.out.print("Digite a nota da 1ª unidade: "); // nota 1
                         float nt1 = sc.nextFloat();
-                        Calculo.setNota1(nt1);
 
                         System.out.print("Digite a nota da 2ª unidade: "); // nota 2
                         float nt2 = sc.nextFloat();
-                        Calculo.setNota2(nt2);
 
-                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", materia.getNomeMateria()); // frequência
-                        float freq = sc.nextFloat();
-                        Calculo.setFreq(freq);
+                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", m); // frequência
+                        float f = sc.nextFloat();
 
                         System.out.print("\n");
 
-                        String status = Calculo.determinarStatus(Calculo.mediaNotas(), Calculo.getFreq());
-
-                        int pos = Formatacao.getCount();    // posição atual para inserir
-                        Formatacao.getBoletim()[pos][0] = materia.getNomeMateria();
-
-                        // Formatacao.getBoletim()[Formatacao.getCount()][3] -> getCount pegava posição 1
-
-
-                        Formatacao.getBoletim()[pos][1] = String.format("%.1f", Calculo.getNota1());
-                        Formatacao.getBoletim()[pos][2] = String.format("%.1f", Calculo.getNota2());
-                        Formatacao.getBoletim()[pos][3] = String.format("%.0f", Calculo.getFreq());
-                        Formatacao.getBoletim()[pos][4] = status; // Status
-
-                        Formatacao.incrementoCount();
-                        // agora inicializa como 0, no final da adição de dados da matéria o count da classe Formatação é atualizado
+                        Disciplina materia = new Disciplina(m, nt1, nt2, f);
 
                     } else {
-                        Formatacao.setCount(Formatacao.getCount() - 1);
                         System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
                     }
                     break;
                 case 2:
-                    if (Formatacao.getCount() == 0) {
+                    if (Disciplina.getCount() == 0) {
                         System.out.println("\nNenhuma matéria cadastrada!\n");
                     } else {
                         System.out.print("Digite o nome da matéria a ser consultada: ");
-                        Busca.setConsulta(Formatacao.formatName(sc.nextLine()));
-                        System.out.println(Busca.buscaEspecifica());
+                        System.out.println(Disciplina.buscarMateria(sc.nextLine()));
                     }
                     break;
                 case 3:
-                    if (Formatacao.getCount() == 0) {
+                    if (Disciplina.getCount() == 0) {
                         System.out.println("\nNenhuma matéria cadastrada!\n");
                     } else {
-                        Busca.buscaAll();
+                        Disciplina.getBoletimFormatado();
                     }
                     break;
                 case 4:
-                    if (Formatacao.getCount() > 0 ) {
+                    if (Disciplina.getCount() > 0 ) {
                         try {
-                            Txt.criarTxt(PATH);
+                            Disciplina.criarHistoricoBoletim(PATH);
                             try {
-                                Txt.escreverNoTxt(Formatacao.getBoletim(), Formatacao.getCount(), DELIMITADOR, PATH);
+                                Disciplina.escreverHistoricoBoletim(PATH, DELIMITADOR);
                             } catch (IOException e) {
                                 System.out.println("\nOcorreu um erro ao escrever no arquivo: " + e.getMessage());
                             }
@@ -111,5 +91,18 @@ public class GerenciadorAvancadoOO {
             }
         }
         sc.close();
+    }
+
+    /**
+     * Escrever o menu
+     */
+    public static void menu() {
+        System.out.println("""
+                ----------  MENU  ----------
+                [1] Adicionar Disciplina
+                [2] Consultar Disciplina
+                [3] Exibir Disciplinas
+                [4] Sair
+                ----------------------------""");
     }
 }

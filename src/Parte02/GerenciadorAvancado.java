@@ -1,7 +1,8 @@
+package Parte02;
+
 import java.util.Scanner;
 import java.util.Locale;
 import java.io.*;
-
 
 // Programa para Gerenciar as Disciplinas Avançado
 public class GerenciadorAvancado {
