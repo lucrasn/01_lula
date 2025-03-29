@@ -1,10 +1,12 @@
 package Parte04;
 
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Disciplina {
-    private static String[][] boletim;
-    private static int count;
+    private static List<ArrayList<ArrayList<String>>> boletim;
+    private static List<Integer> count; // a gente agora tem um contador diferente para cada aluno
     private String nomeMateria;
     private final int INDICE;
     private final float NOTA1;
@@ -14,8 +16,14 @@ public class Disciplina {
     private final float FINAL;
 
     public Disciplina() {
-        this.nomeMateria = "Materia";
-        this.INDICE = count;
+        Aluno aluno = new Aluno();
+
+        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
+        count = new ArrayList<Integer>();
+        count.add(0);
+
+        this.nomeMateria = null;
+        this.INDICE = count.get(aluno.getINDICE());
         this.NOTA1 = 5;
         this.NOTA2 = 5;
         this.FREQUENCIA = 70;
@@ -23,18 +31,47 @@ public class Disciplina {
         this.MEDIA = (this.NOTA1 + this.NOTA2)/ 2;
         this.FINAL = 0;
 
-        boletim[this.INDICE][0] = this.nomeMateria;
-        boletim[this.INDICE][2] = String.valueOf(this.NOTA1);
-        boletim[this.INDICE][3] = String.valueOf(this.NOTA2);
-        boletim[this.INDICE][4] = String.valueOf(this.FREQUENCIA);
-        boletim[this.INDICE][5] = status();
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA2));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
 
-        count++;
+        int incremento = count.get(aluno.getINDICE()) + 1;
+        count.set(aluno.getINDICE(), incremento);
     }
 
-    public Disciplina(String nomeMateria, float n1, float n2, float f) {
+    public Disciplina(Aluno aluno) {
+        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
+        count = new ArrayList<Integer>();
+        count.add(0);
+
+        this.nomeMateria = null;
+        this.INDICE = count.get(aluno.getINDICE());
+        this.NOTA1 = 5;
+        this.NOTA2 = 5;
+        this.FREQUENCIA = 70;
+
+        this.MEDIA = (this.NOTA1 + this.NOTA2)/ 2;
+        this.FINAL = 0;
+
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA2));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
+
+        int incremento = count.get(aluno.getINDICE()) + 1;
+        count.set(aluno.getINDICE(), incremento);
+    }
+
+    public Disciplina(Aluno aluno, String nomeMateria, float n1, float n2, float f) {
+        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
+        count = new ArrayList<Integer>();
+        count.add(0);
+
         this.nomeMateria = nomeMateria;
-        this.INDICE = count;
+        this.INDICE = count.get(aluno.getINDICE());
         this.NOTA1 = n1;
         this.NOTA2 = n2;
         this.FREQUENCIA = f;
@@ -47,18 +84,26 @@ public class Disciplina {
             this.FINAL = (5 - this.MEDIA * 0.6F) / 0.4F;
         }
 
-        boletim[this.INDICE][0] = this.nomeMateria;
-        boletim[this.INDICE][1] = String.valueOf(this.NOTA1);
-        boletim[this.INDICE][2] = String.valueOf(this.NOTA2);
-        boletim[this.INDICE][3] = String.valueOf(this.FREQUENCIA);
-        boletim[this.INDICE][4] = status();
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA2));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
+        boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
 
-        count++;
+        int incremento = count.get(aluno.getINDICE()) + 1;
+        count.set(aluno.getINDICE(), incremento);
     }
 
     @Override
     public String toString() {
-        return formatarVisualizacao(this.INDICE);
+        return "Disciplina{" +
+                "nomeMateria='" + nomeMateria + '\'' +
+                ", NOTA1=" + NOTA1 +
+                ", NOTA2=" + NOTA2 +
+                ", FREQUENCIA=" + FREQUENCIA +
+                ", MEDIA=" + MEDIA +
+                ", FINAL=" + FINAL +
+                '}';
     }
 
     /**
@@ -81,53 +126,61 @@ public class Disciplina {
     /**
      * Formata como será printado a materia.
      *
+     * @param aluno O aluno que terá a disciplina formatada
      * @param i Posição da materia no boletim
      * @return Uma String da materia formatada
      */
-    private static String formatarVisualizacao(int i) {
-        return "\nNome da Matéria: " + boletim[i][0] + "\nNota 1: " + boletim[i][1] + "\nNota 2: " + boletim[i][2] +
-                "\nFrequência: " + boletim[i][3] + "%" + "\nStatus: " + boletim[i][4] + "\n\n";
+    private static String formatarVisualizacao(Aluno aluno, int i) {
+        List<ArrayList<String>> boletimAluno = boletim.get(aluno.getINDICE());
+
+        return "\nNome da Matéria: " + boletimAluno.get(i).getFirst() +
+                "\nNota 1: " + boletimAluno.get(i).get(1) +
+                "\nNota 2: " + boletimAluno.get(i).get(2) +
+                "\nFrequência: " + boletimAluno.get(i).get(3) + "%" +
+                "\nStatus: " + boletimAluno.get(i).getLast() + "\n\n";
     }
 
     /**
      * Procurar por materias no boletim
      *
+     * @param aluno O aluno de onde iremos procurar as materias
      * @param consulta materia a ser procurada
      * @param i índice do qual compararemos o nome da materia do boletim com a consulta
      * @return valor booleano -> true se achou e false se não
      */
-    public static boolean materiaExiste(String consulta, int i) {
-        if (count == i) {
+    public static boolean materiaExiste(Aluno aluno, String consulta, int i) {
+        if (count.get(aluno.getINDICE()) == i) {
             return false;
-        } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
+        } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
             return true;
         } else {
-            return materiaExiste(consulta, i + 1);
+            return materiaExiste(aluno, consulta, i + 1);
         }
     }
-    public static boolean materiaExiste(String consulta) {
-        return materiaExiste(consulta, 0);
+    public static boolean materiaExiste(Aluno aluno, String consulta) {
+        return materiaExiste(aluno, consulta, 0);
     }
 
 
     /**
      * Procurar por materias no boletim
      *
+     * @param aluno O aluno de onde iremos procurar as materias
      * @param consulta materia a ser procurada
      * @param i índice do qual compararemos o nome da materia do boletim com a consulta
      * @return formatarVisualizacao da materia caso seja achado a materia
      */
-    public static String buscarMateria(String consulta, int i) {
-        if (count == i) {
+    public static String buscarMateria(Aluno aluno, String consulta, int i) {
+        if (count.get(aluno.getINDICE()) == i) {
             return "\nDisciplina não cadastrada!\n";
-        } else if (boletim[i][0].equalsIgnoreCase(consulta)) {
-            return formatarVisualizacao(i);
+        } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
+            return formatarVisualizacao(aluno, i);
         } else {
-            return buscarMateria(consulta, i + 1);
+            return buscarMateria(aluno, consulta, i + 1);
         }
     }
-    public static String buscarMateria(String consulta) {
-        return buscarMateria(consulta, 0);
+    public static String buscarMateria(Aluno aluno,String consulta) {
+        return buscarMateria(aluno, consulta, 0);
     }
 
     /**
@@ -174,18 +227,20 @@ public class Disciplina {
      * Escrever no arquivo txt
      *
      * @param path Caminho do arquivo txt
-     * @param delimitador Caractere que divide as informações no arquivo
+     * @param delimitadores Lista com dois elementos onde cada elemento é um caractere que divide as informações no arquivo
      * @throws IOException Caso não ache o arquivo txt
      */
-    public static void escreverHistoricoBoletim(String path, String delimitador) throws IOException {
+    public static void escreverHistoricoBoletim(String path, String[] delimitadores) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        int nAlunos = Aluno.pegarLinhasRegistroDeAlunos(delimitadores[1], path); // isso eu to supondo que nesse metodo você vai usar o delimitador ';'
 
-        for (int i = 0; i < count; i++) {
-            String linha = boletim[i][0] + delimitador +
-                    boletim[i][1] + delimitador +
-                    boletim[i][2] + delimitador +
-                    boletim[i][3] + delimitador +
-                    boletim[i][4];
+        // TODO: tu vai ter que fazer dois for aqui pra poder fazer um boletim.get(i).get(j)... tlgd
+        for (int i = 0; i < nAlunos; i++) {
+            String linha = boletim.get(i).getFirst() + delimitador +
+                    boletim.get(i).get(1) + delimitador +
+                    boletim.get(i).get(2) + delimitador +
+                    boletim.get(i).get(3) + delimitador +
+                    boletim.get(i).getLast();
 
             writer.write(linha);
             writer.newLine();
@@ -198,15 +253,13 @@ public class Disciplina {
     /**
      * Ler o arquivo txt
      *
-     * @param maxDisciplinas Numero maximo de disciplinas do boletim
-     * @param atributes Numero de atributos do boletim
-     * @param delimitador Caractere que divide as informações no arquivo
+     * @param delimitadores Lista com dois elementos onde cada elemento é um caractere que divide as informações no arquivo
      * @param path Caminho até o arquivo
      * @throws IOException Caso não encontre o arquivo txt
      */
-    public static void lerHistoricoBoletim(int maxDisciplinas, int atributes, String delimitador, String path) throws IOException {
-        String[][] historico = new String[maxDisciplinas][atributes];
-        int c = 0;
+    public static void lerHistoricoBoletim(String[] delimitadores, String path) throws IOException {
+        List<ArrayList<ArrayList<String>>> historico = new ArrayList<ArrayList<ArrayList<String>>>();
+        ArrayList<ArrayList<String>> historicoAluno = new ArrayList<ArrayList<String>>();
         File archive = new File(path);
 
         if (archive.exists()) {
@@ -215,15 +268,22 @@ public class Disciplina {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] atributos = line.split(delimitador);
+                int c = 0;
+                String[] materias = line.split(delimitadores[0]);
 
-                historico[c][0] = atributos[0];
-                historico[c][1] = atributos[1];
-                historico[c][2] = atributos[2];
-                historico[c][3] = atributos[3];
-                historico[c][4] = atributos[4];
+                for (String dados : materias) {
+                    String[] atributos = dados.split(delimitadores[1]);
 
-                c++;
+                    historicoAluno.get(c).add(atributos[0]);
+                    historicoAluno.get(c).add(atributos[1]);
+                    historicoAluno.get(c).add(atributos[2]);
+                    historicoAluno.get(c).add(atributos[3]);
+                    historicoAluno.get(c).add(atributos[4]);
+
+                    c++;
+                }
+
+                historico.add(historicoAluno);
             }
             reader.close();
         }
@@ -232,54 +292,53 @@ public class Disciplina {
     }
 
     /**
-     * Pegar a quantidade de linhas do arquivo txt
+     * Pegar a quantidade de materias que cada aluno tem cadastrada no historico (arquivo .txt)
      *
+     * @param delimitador Caractere que divide as materias no arquivo
      * @param path O caminho do arquivo
      * @throws IOException Caso não encontre o arquivo txt
      */
-    public static void pegarLinhasHistoricoBoletim(String path) throws IOException {
-        int n = 0;
+    public static void pegarNumeroDeMateriasHistoricoBoletim(String delimitador, String path) throws IOException {
         File archive = new File(path);
+        int nAlunos = 0;
 
         if (archive.exists()) {
             BufferedReader reader = new BufferedReader(new FileReader(archive));
 
-            while ((reader.readLine()) != null) {
-                n++;
+            String line;
+            while ((line = reader.readLine()) != null) {
+                int nMaterias = 0;
+                String[] materias = line.split(delimitador);
+
+                for (String dados : materias) {
+                    nMaterias++;
+                }
+
+                count.set(nAlunos, nMaterias);
+                nAlunos++;
             }
             reader.close();
         }
-        count = n;
     }
 
-    public static String[][] getBoletim() {
+    public static List<ArrayList<ArrayList<String>>> getBoletim() {
         return boletim;
     }
 
     /**
      * Buscar todas as disciplinas
      */
-    public static void getBoletimFormatado() {
-        for (int i = 0; i < count; i++) {
-            System.out.print(formatarVisualizacao(i));
+    public static void getBoletimFormatado(Aluno aluno) {
+        for (int i = 0; i < count.get(aluno.getINDICE()); i++) {
+            System.out.print(formatarVisualizacao(aluno, i));
         }
     }
 
-    public static void setBoletim(String[][] boletim) {
+    public static void setBoletim(List<ArrayList<ArrayList<String>>> boletim) {
         Disciplina.boletim = boletim;
     }
 
-    /**
-     * Seta um boletim vazio (matriz vazia)
-     *
-     * @param m quantidade de linhas
-     * @param n quantidade de colunas
-     */
-    public static void setBoletimVazio(int m, int n) {
-        Disciplina.boletim = new String[m][n];
-    }
-
-    public static int getCount() {
+    public static List<Integer> getCount() {
         return count;
     }
 

@@ -8,18 +8,15 @@ import java.util.Scanner;
  * Programa para Gerencias as Disciplinas Avançado O.O.
  */
 public class GerenciadorAvancadoOO {
-    private static final int MAX_DISCIPLINAS = 1000;
-    private static final int QTD_ATRIBUTOS = 5;
     private static final String PATH = "historico/boletim.txt";
-    private static final String DELIMITADOR = ";";
+    private static final String[] DELIMITADOR = new String[]{":", ";"};
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in).useLocale(Locale.US);
-        Disciplina.setBoletimVazio(MAX_DISCIPLINAS, QTD_ATRIBUTOS);
 
         try {
-            Disciplina.lerHistoricoBoletim(MAX_DISCIPLINAS, QTD_ATRIBUTOS, DELIMITADOR, PATH);
-            Disciplina.pegarLinhasHistoricoBoletim(PATH);
+            Disciplina.lerHistoricoBoletim(DELIMITADOR, PATH);
+            Disciplina.pegarNumeroDeMateriasHistoricoBoletim(DELIMITADOR[0], PATH);
 
         } catch (IOException e) {
             System.out.println("\nOcorreu um erro ao ler o historico: " + e.getMessage() + "\n");
@@ -32,12 +29,17 @@ public class GerenciadorAvancadoOO {
             int opcao = sc.nextInt();
             sc.nextLine();
 
+            // TODO: O aluno teria que "logar" primeiro antes de ir adiante no código
+            Aluno aluno = new Aluno(); // por enquanto para o codigo não quebrar
+
+            int nDisciplinasAluno = Disciplina.getCount().get(aluno.getINDICE());
             switch (opcao) {
                 case 1:
                     System.out.print("\nDigite o nome da materia: "); // nome da materia
                     String m = Disciplina.formatarNomeMateria(sc.nextLine());
 
-                    if (Disciplina.getCount() == 0 || !Disciplina.materiaExiste(m)) {
+
+                    if (nDisciplinasAluno == 0 || !Disciplina.materiaExiste(aluno, m)) {
                         System.out.print("Digite a nota da 1ª unidade: "); // nota 1
                         float nt1 = sc.nextFloat();
 
@@ -49,29 +51,29 @@ public class GerenciadorAvancadoOO {
 
                         System.out.print("\n");
 
-                        Disciplina materia = new Disciplina(m, nt1, nt2, f);
+                        Disciplina materia = new Disciplina(aluno, m, nt1, nt2, f);
 
                     } else {
                         System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
                     }
                     break;
                 case 2:
-                    if (Disciplina.getCount() == 0) {
+                    if (nDisciplinasAluno == 0) {
                         System.out.println("\nNenhuma matéria cadastrada!\n");
                     } else {
                         System.out.print("Digite o nome da matéria a ser consultada: ");
-                        System.out.println(Disciplina.buscarMateria(sc.nextLine()));
+                        System.out.println(Disciplina.buscarMateria(aluno, sc.nextLine()));
                     }
                     break;
                 case 3:
-                    if (Disciplina.getCount() == 0) {
+                    if (nDisciplinasAluno == 0) {
                         System.out.println("\nNenhuma matéria cadastrada!\n");
                     } else {
-                        Disciplina.getBoletimFormatado();
+                        Disciplina.getBoletimFormatado(aluno);
                     }
                     break;
                 case 4:
-                    if (Disciplina.getCount() > 0 ) {
+                    if (nDisciplinasAluno > 0 ) {
                         try {
                             Disciplina.criarHistoricoBoletim(PATH);
                             try {
