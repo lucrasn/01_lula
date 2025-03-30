@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Disciplina {
-    private static List<ArrayList<ArrayList<String>>> boletim;
-    private static List<Integer> count; // a gente agora tem um contador diferente para cada aluno
+    private static List<ArrayList<ArrayList<String>>> boletim = new ArrayList<ArrayList<ArrayList<String>>>();
+    private static List<Integer> count = new ArrayList<Integer>();
     private String nomeMateria;
     private final int INDICE;
     private final float NOTA1;
@@ -17,9 +17,6 @@ public class Disciplina {
 
     public Disciplina() {
         Aluno aluno = new Aluno();
-
-        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
-        count = new ArrayList<Integer>();
         count.add(0);
 
         this.nomeMateria = null;
@@ -30,6 +27,14 @@ public class Disciplina {
 
         this.MEDIA = (this.NOTA1 + this.NOTA2)/ 2;
         this.FINAL = 0;
+
+        while (boletim.size() <= aluno.getINDICE()) {
+            boletim.add(new ArrayList<ArrayList<String>>());
+        }
+
+        while (boletim.get(aluno.getINDICE()).size() <= this.INDICE) {
+            boletim.get(aluno.getINDICE()).add(new ArrayList<String>());
+        }
 
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
@@ -42,9 +47,9 @@ public class Disciplina {
     }
 
     public Disciplina(Aluno aluno) {
-        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
-        count = new ArrayList<Integer>();
-        count.add(0);
+        while (count.size() <= aluno.getINDICE()) {
+            count.add(0);
+        }
 
         this.nomeMateria = null;
         this.INDICE = count.get(aluno.getINDICE());
@@ -54,6 +59,14 @@ public class Disciplina {
 
         this.MEDIA = (this.NOTA1 + this.NOTA2)/ 2;
         this.FINAL = 0;
+
+        while (boletim.size() <= aluno.getINDICE()) {
+            boletim.add(new ArrayList<ArrayList<String>>());
+        }
+
+        while (boletim.get(aluno.getINDICE()).size() <= this.INDICE) {
+            boletim.get(aluno.getINDICE()).add(new ArrayList<String>());
+        }
 
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
@@ -66,9 +79,9 @@ public class Disciplina {
     }
 
     public Disciplina(Aluno aluno, String nomeMateria, float n1, float n2, float f) {
-        boletim = new ArrayList<ArrayList<ArrayList<String>>>();
-        count = new ArrayList<Integer>();
-        count.add(0);
+        while (count.size() <= aluno.getINDICE()) {
+            count.add(0);
+        }
 
         this.nomeMateria = nomeMateria;
         this.INDICE = count.get(aluno.getINDICE());
@@ -82,6 +95,14 @@ public class Disciplina {
             this.FINAL = 0;
         } else {
             this.FINAL = (5 - this.MEDIA * 0.6F) / 0.4F;
+        }
+
+        while (boletim.size() <= aluno.getINDICE()) {
+            boletim.add(new ArrayList<ArrayList<String>>());
+        }
+
+        while (boletim.get(aluno.getINDICE()).size() <= this.INDICE) {
+            boletim.get(aluno.getINDICE()).add(new ArrayList<String>());
         }
 
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
