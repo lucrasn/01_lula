@@ -17,7 +17,6 @@ public class Disciplina {
 
     public Disciplina() {
         Aluno aluno = new Aluno();
-        count.add(0);
 
         this.nomeMateria = null;
         this.INDICE = count.get(aluno.getINDICE());
@@ -47,10 +46,6 @@ public class Disciplina {
     }
 
     public Disciplina(Aluno aluno) {
-        while (count.size() <= aluno.getINDICE()) {
-            count.add(0);
-        }
-
         this.nomeMateria = null;
         this.INDICE = count.get(aluno.getINDICE());
         this.NOTA1 = 5;
@@ -79,10 +74,6 @@ public class Disciplina {
     }
 
     public Disciplina(Aluno aluno, String nomeMateria, float n1, float n2, float f) {
-        while (count.size() <= aluno.getINDICE()) {
-            count.add(0);
-        }
-
         this.nomeMateria = nomeMateria;
         this.INDICE = count.get(aluno.getINDICE());
         this.NOTA1 = n1;
@@ -251,19 +242,22 @@ public class Disciplina {
      * @param delimitadores Lista com dois elementos onde cada elemento é um caractere que divide as informações no arquivo
      * @throws IOException Caso não ache o arquivo txt
      */
-    public static void escreverHistoricoBoletim(String path, String[] delimitadores) throws IOException {
+    public static void escreverHistoricoBoletim(String path, String user, String[] delimitadores) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-        int nAlunos = Aluno.pegarLinhasRegistroDeAlunos(delimitadores[1], path); // isso eu to supondo que nesse metodo você vai usar o delimitador ';'
+        int nAlunos = Aluno.pegarLinhasRegistroDeAlunos(user);
 
-        // TODO: tu vai ter que fazer dois for aqui pra poder fazer um boletim.get(i).get(j)... tlgd
         for (int i = 0; i < nAlunos; i++) {
-            String linha = boletim.get(i).getFirst() + delimitador +
-                    boletim.get(i).get(1) + delimitador +
-                    boletim.get(i).get(2) + delimitador +
-                    boletim.get(i).get(3) + delimitador +
-                    boletim.get(i).getLast();
+            for (int j = 0; j < nAlunos; j++) {
+                String linha =
+                        boletim.get(i).get(j).getFirst() + delimitadores[1] +
+                        boletim.get(i).get(j).get(1) + delimitadores[1] +
+                        boletim.get(i).get(j).get(2) + delimitadores[1] +
+                        boletim.get(i).get(j).get(3) + delimitadores[1] +
+                        boletim.get(i).get(j).getLast() + delimitadores[0];
 
-            writer.write(linha);
+                writer.write(linha);
+            }
+
             writer.newLine();
         }
 
@@ -341,6 +335,9 @@ public class Disciplina {
             reader.close();
         }
     }
+
+    /* TODO:
+    *   criar um metodo para adicionar um elemento no @atributo count (ex: count.add(0))*/
 
     public static List<ArrayList<ArrayList<String>>> getBoletim() {
         return boletim;
