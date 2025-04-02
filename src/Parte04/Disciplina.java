@@ -247,20 +247,22 @@ public class Disciplina {
         int nAlunos = Aluno.pegarLinhasRegistroDeAlunos(user);
 
         for (int i = 0; i < nAlunos; i++) {
-            for (int j = 0; j < nAlunos; j++) {
-                String linha =
-                        boletim.get(i).get(j).getFirst() + delimitadores[1] +
-                        boletim.get(i).get(j).get(1) + delimitadores[1] +
-                        boletim.get(i).get(j).get(2) + delimitadores[1] +
-                        boletim.get(i).get(j).get(3) + delimitadores[1] +
-                        boletim.get(i).get(j).getLast() + delimitadores[0];
+            int numDisciplinas = boletim.get(i).size();
 
-                writer.write(linha);
+            for (int j = 0; j < numDisciplinas; j++) {
+                if (!boletim.get(i).get(j).isEmpty()) {
+                    String linha =
+                            boletim.get(i).get(j).getFirst() + delimitadores[1] +
+                                    boletim.get(i).get(j).get(1) + delimitadores[1] +
+                                    boletim.get(i).get(j).get(2) + delimitadores[1] +
+                                    boletim.get(i).get(j).get(3) + delimitadores[1] +
+                                    boletim.get(i).get(j).getLast() + delimitadores[0];
+
+                    writer.write(linha);
+                }
             }
-
             writer.newLine();
         }
-
         System.out.println("Boletim escrito com sucesso!");
         writer.close();
     }
@@ -273,8 +275,7 @@ public class Disciplina {
      * @throws IOException Caso não encontre o arquivo txt
      */
     public static void lerHistoricoBoletim(String[] delimitadores, String path) throws IOException {
-        List<ArrayList<ArrayList<String>>> historico = new ArrayList<ArrayList<ArrayList<String>>>();
-        ArrayList<ArrayList<String>> historicoAluno = new ArrayList<ArrayList<String>>();
+        List<ArrayList<ArrayList<String>>> historico = new ArrayList<>();
         File archive = new File(path);
 
         if (archive.exists()) {
@@ -283,19 +284,21 @@ public class Disciplina {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                int c = 0;
+                ArrayList<ArrayList<String>> historicoAluno = new ArrayList<>();
+
                 String[] materias = line.split(delimitadores[0]);
 
                 for (String dados : materias) {
                     String[] atributos = dados.split(delimitadores[1]);
+                    ArrayList<String> dadosMateria = new ArrayList<>();
 
-                    historicoAluno.get(c).add(atributos[0]);
-                    historicoAluno.get(c).add(atributos[1]);
-                    historicoAluno.get(c).add(atributos[2]);
-                    historicoAluno.get(c).add(atributos[3]);
-                    historicoAluno.get(c).add(atributos[4]);
+                    dadosMateria.add(atributos[0]);
+                    dadosMateria.add(atributos[1]);
+                    dadosMateria.add(atributos[2]);
+                    dadosMateria.add(atributos[3]);
+                    dadosMateria.add(atributos[4]);
 
-                    c++;
+                    historicoAluno.add(dadosMateria);
                 }
 
                 historico.add(historicoAluno);
@@ -322,11 +325,10 @@ public class Disciplina {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                int nMaterias = 0;
-                String[] materias = line.split(delimitador);
+                int nMaterias = line.split(delimitador).length;
 
-                for (String dados : materias) {
-                    nMaterias++;
+                while (count.size() <= nAlunos) {
+                    count.add(0);
                 }
 
                 count.set(nAlunos, nMaterias);

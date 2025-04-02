@@ -23,6 +23,11 @@ public class Aluno {
         Disciplina.getCount().add(0);
     }
 
+    public Aluno(String nome, String matricula, int indice){
+        this.nome = nome;
+        this.matricula = matricula;
+        this.INDICE = indice;
+    }
 
     public Aluno(String nome, String matricula){
         this.INDICE = count;
@@ -53,7 +58,6 @@ public class Aluno {
      * @param nm  nome do aluno
      * @return string formatada
      */
-
     public static String formatarNomeAluno(String nm) {
         nm = nm.toLowerCase();
         String[] nomeAlunoSeparado = nm.split(" ");
@@ -133,7 +137,6 @@ public class Aluno {
         return null;
     }
 
-
     /**
      * Cria Txt de alunos
      *
@@ -158,13 +161,11 @@ public class Aluno {
      * Caso já esteja cadastrado sai do metodo sem adicionar duplicatas
      * Caso seja um novo aluno, o metodo é reponsável por escrever ele no Txt
      *
-     *
      * @param user Caminho do arquivo
      * @param nome Nome do aluno cadastrado
      * @param senha Matrícula do aluno(também serve como senha para logar)
      * @param delimitador Lista com dois tipos de delimitadores
      */
-
     public static void cadastrarAluno(String user, String nome, String senha, String delimitador) throws IOException {
 
         BufferedReader reader = new BufferedReader(new FileReader(user));
@@ -239,16 +240,16 @@ public class Aluno {
         return  n;
     }
 
-    public static boolean login(String nome, String matricula) {
+    public static Aluno login(String nome, String matricula) {
         String matriculaCorreta = buscarMatricula(nome);
         if (matriculaCorreta != null && matriculaCorreta.equals(matricula)) {
             System.out.println("\nLogin bem-sucedido! Bem-vindo, " + nome + "!\n");
-            return true;
+            int indiceAluno = registro.indexOf(nome + ";" + matricula);
+            return new Aluno(nome, matricula, indiceAluno);
         }
         System.out.println("\nNome ou matrícula incorretos.\n");
-        return false;
+        return null;
     }
-
 
     public static List<String> getRegistro() {
         return registro;
@@ -261,6 +262,7 @@ public class Aluno {
     public int getINDICE() {
         return INDICE;
     }
+
     public static int getCount(){
         return count;
     }
