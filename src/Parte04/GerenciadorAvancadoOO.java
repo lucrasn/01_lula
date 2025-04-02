@@ -3,91 +3,174 @@ package Parte04;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Programa para Gerencias as Disciplinas Avançado O.O.
  */
 public class GerenciadorAvancadoOO {
-    private static final int MAX_DISCIPLINAS = 1000;
-    private static final int QTD_ATRIBUTOS = 5;
     private static final String PATH = "historico/boletim.txt";
-    private static final String DELIMITADOR = ";";
+    private static final String USER = "historico/alunos.txt";
+    private static final String[] DELIMITADOR = new String[]{";", ":"};
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in).useLocale(Locale.US);
-        Disciplina.setBoletimVazio(MAX_DISCIPLINAS, QTD_ATRIBUTOS);
 
         try {
-            Disciplina.lerHistoricoBoletim(MAX_DISCIPLINAS, QTD_ATRIBUTOS, DELIMITADOR, PATH);
-            Disciplina.pegarLinhasHistoricoBoletim(PATH);
+            Disciplina.lerHistoricoBoletim(DELIMITADOR, PATH);
+            Disciplina.pegarNumeroDeMateriasHistoricoBoletim(DELIMITADOR[1], PATH);
 
         } catch (IOException e) {
-            System.out.println("\nOcorreu um erro ao ler o historico: " + e.getMessage() + "\n");
+            System.out.println("\nOcorreu um erro ao ler o histórico: " + e.getMessage() + "\n");
+        }
+
+        try {
+            Aluno.lerRegistroAlunos(DELIMITADOR, USER);
+
+            int numAlunos = Aluno.pegarLinhasRegistroDeAlunos(USER);
+
+            while (Disciplina.getBoletim().size() < numAlunos) {
+                Disciplina.getBoletim().add(new ArrayList<>());
+            }
+
+            while (Disciplina.getDisciplinasCount().size() < numAlunos) {
+                Disciplina.getDisciplinasCount().add(0);
+            }
+
+        } catch (IOException e) {
+            System.out.println("\nOcorreu um erro ao ler o registro: " + e.getMessage() + "\n");
         }
 
         boolean flag = true;
+        boolean flagSubFirst = true;
+        boolean flagSubLast = false;
         while (flag) {
-            menu();
-            System.out.print("Digite o número correspondente: ");
-            int opcao = sc.nextInt();
-            sc.nextLine();
+            Aluno aluno = null;
+            while (flagSubFirst) {
+                entrar();
+                System.out.print("Digite o número correspondente: ");
+                int opcaoInicial = sc.nextInt();
+                sc.nextLine();
 
-            switch (opcao) {
-                case 1:
-                    System.out.print("\nDigite o nome da materia: "); // nome da materia
-                    String m = Disciplina.formatarNomeMateria(sc.nextLine());
+                switch (opcaoInicial) {
 
-                    if (Disciplina.getCount() == 0 || !Disciplina.materiaExiste(m)) {
-                        System.out.print("Digite a nota da 1ª unidade: "); // nota 1
-                        float nt1 = sc.nextFloat();
+                    case 1:
+                        System.out.print("\nDigite o nome completo do aluno: ");
+                        String nome = Aluno.formatarNomeAluno(sc.nextLine());
 
-                        System.out.print("Digite a nota da 2ª unidade: "); // nota 2
-                        float nt2 = sc.nextFloat();
-
-                        System.out.printf("Qual foi a sua frequência em %s? [0 a 100] ", m); // frequência
-                        float f = sc.nextFloat();
-
-                        System.out.print("\n");
-
-                        Disciplina materia = new Disciplina(m, nt1, nt2, f);
-
-                    } else {
-                        System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
-                    }
-                    break;
-                case 2:
-                    if (Disciplina.getCount() == 0) {
-                        System.out.println("\nNenhuma matéria cadastrada!\n");
-                    } else {
-                        System.out.print("Digite o nome da matéria a ser consultada: ");
-                        System.out.println(Disciplina.buscarMateria(sc.nextLine()));
-                    }
-                    break;
-                case 3:
-                    if (Disciplina.getCount() == 0) {
-                        System.out.println("\nNenhuma matéria cadastrada!\n");
-                    } else {
-                        Disciplina.getBoletimFormatado();
-                    }
-                    break;
-                case 4:
-                    if (Disciplina.getCount() > 0 ) {
-                        try {
-                            Disciplina.criarHistoricoBoletim(PATH);
+                        if (!Aluno.alunoExiste(nome, USER)) {
+                            System.out.print("Digite a sua matrícula: ");
+                            String matricula = sc.next();
                             try {
-                                Disciplina.escreverHistoricoBoletim(PATH, DELIMITADOR);
+                                Aluno.criarRegistroDeAlunos(USER);
+                                try {
+                                    Aluno.cadastrarAluno(USER, nome, matricula, DELIMITADOR[0]);
+                                    aluno = new Aluno(nome, matricula);
+                                } catch (IOException e) {
+                                    System.out.println("\nErro ao criar o registro: " + e.getMessage());
+                                }
                             } catch (IOException e) {
-                                System.out.println("\nOcorreu um erro ao escrever no arquivo: " + e.getMessage());
+                                System.out.println("\nErro ao criar o arquivo: " + e.getMessage());
                             }
-                        } catch (IOException e) {
-                            System.out.println("\nOcorreu um erro ao criar o arquivo: " + e.getMessage());
+                        } else {
+                            System.out.println("\nAluno já cadastrado no sistema, tente realizar o Login!\n");
                         }
-                    }
-                    System.out.println("Até a próxima!");
-                    flag = false;
-                    break;
-                default:
-                    System.out.println("Opção inválida, tente novamente!\n");
+                        break;
+
+                    case 2:
+                        System.out.print("\nDigite o nome completo do aluno: ");
+                        String nm = Aluno.formatarNomeAluno(sc.nextLine());
+
+                        if (!Aluno.alunoExiste(nm, USER)) {
+                            System.out.println("\nAluno não cadastrado, por favor realize seu cadastro antes do Login\n");
+                        } else {
+                            System.out.print("Digite a sua matrícula: ");
+                            String matricula = sc.next();
+
+                            aluno = Aluno.login(nm, matricula);
+                            if (aluno != null) {
+                                flagSubFirst = false;
+                                flagSubLast = true;
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        System.out.println("Até a próxima!");
+                        flagSubFirst = false;
+                        flag = false;
+                        break;
+
+                    default:
+                        System.out.println("\nOpção inválida, tente novamente!\n");
+                }
+            }
+
+            while (flagSubLast) {
+                menu();
+                System.out.print("Digite o número correspondente: ");
+                int opcao = sc.nextInt();
+                sc.nextLine();
+
+                int nDisciplinasAluno = Disciplina.getDisciplinasCount().get(aluno.getINDICE());
+
+                switch (opcao) {
+                    case 1:
+                        System.out.print("\nDigite o nome da matéria: ");
+                        String m = Disciplina.formatarNomeMateria(sc.nextLine());
+
+                        if (nDisciplinasAluno == 0 || !Disciplina.materiaExiste(aluno, m)) {
+                            System.out.print("Digite a nota da 1ª unidade: ");
+                            float nt1 = sc.nextFloat();
+
+                            System.out.print("Digite a nota da 2ª unidade: ");
+                            float nt2 = sc.nextFloat();
+
+                            System.out.printf("Qual foi a sua frequência em %s? [0 a 100]: ", m);
+                            float f = sc.nextFloat();
+
+                            System.out.print("\n");
+
+                            new Disciplina(aluno, m, nt1, nt2, f);
+
+                        } else {
+                            System.out.println("\nDisciplina já cadastrada! Tente a opção 2\n");
+                        }
+                        break;
+
+                    case 2:
+                        if (nDisciplinasAluno == 0) {
+                            System.out.println("\nNenhuma matéria cadastrada!\n");
+                        } else {
+                            System.out.print("Digite o nome da matéria a ser consultada: ");
+                            System.out.println(Disciplina.buscarMateria(aluno, sc.nextLine()));
+                        }
+                        break;
+
+                    case 3:
+                        if (nDisciplinasAluno == 0) {
+                            System.out.println("\nNenhuma matéria cadastrada!\n");
+                        } else {
+                            Disciplina.getBoletimFormatado(aluno);
+                        }
+                        break;
+
+                    case 4:
+                        if (nDisciplinasAluno > 0) {
+                            try {
+                                Disciplina.criarHistoricoBoletim(PATH);
+                                Disciplina.escreverHistoricoBoletim(PATH, USER, DELIMITADOR);
+                            } catch (IOException e) {
+                                System.out.println("\nErro ao salvar histórico: " + e.getMessage());
+                            }
+                        }
+                        flagSubFirst = true;
+                        flagSubLast = false;
+                        break;
+
+                    default:
+                        System.out.println("Opção inválida, tente novamente!\n");
+                }
             }
         }
         sc.close();
@@ -102,7 +185,16 @@ public class GerenciadorAvancadoOO {
                 [1] Adicionar Disciplina
                 [2] Consultar Disciplina
                 [3] Exibir Disciplinas
-                [4] Sair
+                [4] Deslogar
                 ----------------------------""");
+    }
+
+    public static void entrar() {
+        System.out.println("""
+                ----------  ENTRAR  ----------
+                [1] Cadastrar Aluno
+                [2] Realizar Login
+                [3] Sair
+                ------------------------------""");
     }
 }

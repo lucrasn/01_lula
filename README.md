@@ -77,7 +77,7 @@ Foram implementadas funções auxiliares para modularizar o código:
 
 ---
 
-### 🧱 Parte 4 - Versão Orientada a Objetos *(Classes: `Disciplina`, `Utils`, `Parte04.GerenciadorAvancadoOO`)*
+### 🧱 Parte 4 - Versão Orientada a Objetos *(Classes: `Parte04.Disciplina`, `Parte04.Aluno`,`Parte04.GerenciadorAvancadoOO`)*
 
 #### 🧩 Abordagem Modular com POO
 - Refatoração completa do projeto para aplicar os princípios da **Programação Orientada a Objetos (POO)**.
@@ -89,9 +89,14 @@ Foram implementadas funções auxiliares para modularizar o código:
   - Representa uma disciplina com seus atributos (`nome`, `nota1`, `nota2`, `frequencia`, `status`)
   - Possui métodos próprios para cálculo de status e exibição de dados
 
+- **`Parte04.Aluno`**:
+  - Representa um aluno com seus atributos (`nome`, `matricula`)
+  - Possui métodos próprios para exibição de dados e salvamento do registro de alunos
+
 - **`Parte04.GerenciadorAvancadoOO`**:
   - Classe principal com o menu e controle de fluxo
   - Utiliza uma `List<Disciplina>` para armazenar os dados, substituindo matrizes
+  - Múltiplos alunos
 
 ---
 
