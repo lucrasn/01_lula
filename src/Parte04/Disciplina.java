@@ -298,16 +298,20 @@ public class Disciplina {
 
                 for (String dados : materias) {
                     String[] atributos = dados.split(delimitadores[1]);
-                    ArrayList<String> dadosMateria = new ArrayList<>();
+                    if (atributos.length >= 5) {
+                        ArrayList<String> dadosMateria = new ArrayList<>();
 
-                    dadosMateria.add(atributos[0]);
-                    dadosMateria.add(atributos[1]);
-                    dadosMateria.add(atributos[2]);
-                    dadosMateria.add(atributos[3]);
-                    dadosMateria.add(atributos[4]);
+                        dadosMateria.add(atributos[0]);
+                        dadosMateria.add(atributos[1]);
+                        dadosMateria.add(atributos[2]);
+                        dadosMateria.add(atributos[3]);
+                        dadosMateria.add(atributos[4]);
 
 
-                    historicoAluno.add(dadosMateria);
+                        historicoAluno.add(dadosMateria);
+                    }else {
+                        System.out.println("Linha inválida ignorada: " + line);
+                    }
                 }
 
                 boletim.add(historicoAluno);
