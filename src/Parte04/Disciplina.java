@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Disciplina {
     private static List<ArrayList<ArrayList<String>>> boletim = new ArrayList<ArrayList<ArrayList<String>>>();
-    private static List<Integer> count = new ArrayList<Integer>();
+    private static List<Integer> disciplinasCount = new ArrayList<Integer>();
     private String nomeMateria;
     private final int INDICE;
     private final float NOTA1;
@@ -19,7 +19,7 @@ public class Disciplina {
         Aluno aluno = new Aluno();
 
         this.nomeMateria = null;
-        this.INDICE = count.get(aluno.getINDICE());
+        this.INDICE = disciplinasCount.get(aluno.getINDICE());
         this.NOTA1 = 5;
         this.NOTA2 = 5;
         this.FREQUENCIA = 70;
@@ -41,13 +41,13 @@ public class Disciplina {
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
 
-        int incremento = count.get(aluno.getINDICE()) + 1;
-        count.set(aluno.getINDICE(), incremento);
+        int incremento = disciplinasCount.get(aluno.getINDICE()) + 1;
+        disciplinasCount.set(aluno.getINDICE(), incremento);
     }
 
     public Disciplina(Aluno aluno) {
         this.nomeMateria = null;
-        this.INDICE = count.get(aluno.getINDICE());
+        this.INDICE = disciplinasCount.get(aluno.getINDICE());
         this.NOTA1 = 5;
         this.NOTA2 = 5;
         this.FREQUENCIA = 70;
@@ -69,13 +69,13 @@ public class Disciplina {
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
 
-        int incremento = count.get(aluno.getINDICE()) + 1;
-        count.set(aluno.getINDICE(), incremento);
+        int incremento = disciplinasCount.get(aluno.getINDICE()) + 1;
+        disciplinasCount.set(aluno.getINDICE(), incremento);
     }
 
     public Disciplina(Aluno aluno, String nomeMateria, float n1, float n2, float f) {
         this.nomeMateria = nomeMateria;
-        this.INDICE = count.get(aluno.getINDICE());
+        this.INDICE = disciplinasCount.get(aluno.getINDICE());
         this.NOTA1 = n1;
         this.NOTA2 = n2;
         this.FREQUENCIA = f;
@@ -102,8 +102,8 @@ public class Disciplina {
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
         boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
 
-        int incremento = count.get(aluno.getINDICE()) + 1;
-        count.set(aluno.getINDICE(), incremento);
+        int incremento = disciplinasCount.get(aluno.getINDICE()) + 1;
+        disciplinasCount.set(aluno.getINDICE(), incremento);
     }
 
     @Override
@@ -144,12 +144,14 @@ public class Disciplina {
      */
     private static String formatarVisualizacao(Aluno aluno, int i) {
         List<ArrayList<String>> boletimAluno = boletim.get(aluno.getINDICE());
+        ArrayList<String> disciplina = boletimAluno.get(i);
 
-        return "\nNome da Matéria: " + boletimAluno.get(i).getFirst() +
-                "\nNota 1: " + boletimAluno.get(i).get(1) +
-                "\nNota 2: " + boletimAluno.get(i).get(2) +
-                "\nFrequência: " + boletimAluno.get(i).get(3) + "%" +
-                "\nStatus: " + boletimAluno.get(i).getLast() + "\n\n";
+
+        return "\nNome da Matéria: " + disciplina.get(0) +
+                "\nNota 1: " +         disciplina.get(1) +
+                "\nNota 2: " +         disciplina.get(2) +
+                "\nFrequência: " +     disciplina.get(3) + "%" +
+                "\nStatus: " +         disciplina.get(4) + "\n\n";
     }
 
     /**
@@ -161,7 +163,7 @@ public class Disciplina {
      * @return valor booleano -> true se achou e false se não
      */
     public static boolean materiaExiste(Aluno aluno, String consulta, int i) {
-        if (count.get(aluno.getINDICE()) == i) {
+        if (disciplinasCount.get(aluno.getINDICE()) == i) {
             return false;
         } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
             return true;
@@ -183,7 +185,7 @@ public class Disciplina {
      * @return formatarVisualizacao da materia caso seja achado a materia
      */
     public static String buscarMateria(Aluno aluno, String consulta, int i) {
-        if (count.get(aluno.getINDICE()) == i) {
+        if (disciplinasCount.get(aluno.getINDICE()) == i) {
             return "\nDisciplina não cadastrada!\n";
         } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
             return formatarVisualizacao(aluno, i);
@@ -278,6 +280,9 @@ public class Disciplina {
         List<ArrayList<ArrayList<String>>> historico = new ArrayList<>();
         File archive = new File(path);
 
+        boletim.clear();
+        disciplinasCount.clear();
+
         if (archive.exists()) {
             System.out.println("Arquivo de dados encontrado: " + archive.getCanonicalPath());
             BufferedReader reader = new BufferedReader(new FileReader(archive));
@@ -287,6 +292,7 @@ public class Disciplina {
                 ArrayList<ArrayList<String>> historicoAluno = new ArrayList<>();
 
                 String[] materias = line.split(delimitadores[0]);
+
 
                 for (String dados : materias) {
                     String[] atributos = dados.split(delimitadores[1]);
@@ -298,9 +304,10 @@ public class Disciplina {
                     dadosMateria.add(atributos[3]);
                     dadosMateria.add(atributos[4]);
 
+
                     historicoAluno.add(dadosMateria);
                 }
-
+                disciplinasCount.add(historicoAluno.size());
                 historico.add(historicoAluno);
             }
             reader.close();
@@ -327,11 +334,11 @@ public class Disciplina {
             while ((line = reader.readLine()) != null) {
                 int nMaterias = line.split(delimitador).length;
 
-                while (count.size() <= nAlunos) {
-                    count.add(0);
+                while (disciplinasCount.size() <= nAlunos) {
+                    disciplinasCount.add(0);
                 }
 
-                count.set(nAlunos, nMaterias);
+                disciplinasCount.set(nAlunos, nMaterias);
                 nAlunos++;
             }
             reader.close();
@@ -339,7 +346,7 @@ public class Disciplina {
     }
 
     /* TODO:
-    *   criar um metodo para adicionar um elemento no @atributo count (ex: count.add(0))*/
+    *   criar um metodo para adicionar um elemento no @atributo disciplinasCount (ex: disciplinasCount.add(0))*/
 
     public static List<ArrayList<ArrayList<String>>> getBoletim() {
         return boletim;
@@ -349,17 +356,23 @@ public class Disciplina {
      * Buscar todas as disciplinas
      */
     public static void getBoletimFormatado(Aluno aluno) {
-        for (int i = 0; i < count.get(aluno.getINDICE()); i++) {
-            System.out.print(formatarVisualizacao(aluno, i));
+        List<ArrayList<String>> boletimAluno = boletim.get(aluno.getINDICE());
+        int numDisciplinas = disciplinasCount.get(aluno.getINDICE());
+
+        for (int i = 0; i < numDisciplinas; i++) {
+            if(i < boletimAluno.size()){
+                System.out.print(formatarVisualizacao(aluno, i));
+            }
         }
     }
+
 
     public static void setBoletim(List<ArrayList<ArrayList<String>>> boletim) {
         Disciplina.boletim = boletim;
     }
 
     public static List<Integer> getCount() {
-        return count;
+        return disciplinasCount;
     }
 
     public String getNomeMateria() {

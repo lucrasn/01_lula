@@ -65,6 +65,10 @@ public class GerenciadorAvancadoOO {
                                 try {
                                     Aluno.cadastrarAluno(USER, nome, matricula, DELIMITADOR[0]);
                                     aluno = new Aluno(nome, matricula);
+                                    aluno = Aluno.login(nome, matricula);
+                                    if (aluno != null) {
+                                        cadastrado = true;
+                                    }
                                 } catch (IOException e) {
                                     System.out.println("\nErro ao criar o registro: " + e.getMessage());
                                 }

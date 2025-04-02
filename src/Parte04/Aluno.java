@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Aluno {
     private static List<String> registro = new ArrayList<String>();
-    private static int count;
+    private static int alunoCount;
     private final String nome;
     private final String matricula;
     private final int INDICE;
@@ -16,7 +16,7 @@ public class Aluno {
     }
 
     public Aluno() {
-        this.INDICE = count;
+        this.INDICE = alunoCount;
         this.nome = null;
         this.matricula = null;
 
@@ -30,7 +30,7 @@ public class Aluno {
     }
 
     public Aluno(String nome, String matricula){
-        this.INDICE = count;
+        this.INDICE = alunoCount;
         this.nome = nome;
         this.matricula = matricula;
 
@@ -38,18 +38,18 @@ public class Aluno {
             Disciplina.getCount().add(0);
         }
 
-        if (registro.size() <= count){
+        if (registro.size() <= alunoCount){
             // Se o índice não existir, só adiciona o aluno na posição correta
             // Ao invés de linhas vazias, a lista é expandida diretamente com o novo aluno.
-            for (int i = registro.size(); i <= count; i++) {
+            for (int i = registro.size(); i <= alunoCount; i++) {
                 registro.add("");  // Adiciona linhas vazias até o índice correto, mas de forma controlada.
             }
         }
 
-        registro.set(count, this.nome + ";" + this.matricula);
+        registro.set(alunoCount, this.nome + ";" + this.matricula);
 
 
-        count++;
+        alunoCount++;
     }
 
     /**
@@ -100,23 +100,6 @@ public class Aluno {
         }
         return false;
     }
-
-
-//    public static String buscarAluno(String nome, int i) {
-//        if (count == i) {
-//            return "\nAluno não cadastrado!\n";
-//        } else {
-//            String[] dados = registro.get(i).split(";");
-//            if (dados.length >= 1 && dados[0].equalsIgnoreCase(nome)) {
-//                return formatarNomeAluno(dados[0]);
-//            } else {
-//                return buscarAluno(nome, i + 1);
-//            }
-//        }
-//    }
-//    public static String buscarAluno(String nome){
-//        return buscarAluno(nome, 0);
-//    }
 
     /**
      * Procura a matrícula específica de cada aluno
@@ -189,7 +172,7 @@ public class Aluno {
 
     }
 
-    /*TODO: lembrar de que quando ler o registro de alunos adicionar a qnt de materias no count de Disciplinas*/
+    /*TODO: lembrar de que quando ler o registro de alunos adicionar a qnt de materias no alunoCount de Disciplinas*/
     public static void lerRegistroAlunos(String[] delimitadores, String user/*List<ArrayList<ArrayList<String>>> boletim*/) throws IOException {
         File archive = new File(user);
 
@@ -214,7 +197,7 @@ public class Aluno {
                 System.out.println("Linha inválida ignorada: " + line);
             }
         }
-        count = registro.size();
+        alunoCount = registro.size();
 
         reader.close();
     }
@@ -264,6 +247,6 @@ public class Aluno {
     }
 
     public static int getCount(){
-        return count;
+        return alunoCount;
     }
 }
