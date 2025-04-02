@@ -163,9 +163,11 @@ public class Disciplina {
      * @return valor booleano -> true se achou e false se não
      */
     public static boolean materiaExiste(Aluno aluno, String consulta, int i) {
-        if (disciplinasCount.get(aluno.getINDICE()) == i) {
+        int indiceAluno = aluno.getINDICE();
+
+        if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
             return false;
-        } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
+        } else if (boletim.get(indiceAluno).get(i).getFirst().equalsIgnoreCase(consulta)) {
             return true;
         } else {
             return materiaExiste(aluno, consulta, i + 1);
@@ -185,9 +187,11 @@ public class Disciplina {
      * @return formatarVisualizacao da materia caso seja achado a materia
      */
     public static String buscarMateria(Aluno aluno, String consulta, int i) {
-        if (disciplinasCount.get(aluno.getINDICE()) == i) {
-            return "\nDisciplina não cadastrada!\n";
-        } else if (boletim.get(aluno.getINDICE()).get(i).getFirst().equalsIgnoreCase(consulta)) {
+        int indiceAluno = aluno.getINDICE();
+
+        if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
+            return "\nDisciplina não cadastrada!\n";
+        } else if (boletim.get(indiceAluno).get(i).getFirst().equalsIgnoreCase(consulta)) {
             return formatarVisualizacao(aluno, i);
         } else {
             return buscarMateria(aluno, consulta, i + 1);
