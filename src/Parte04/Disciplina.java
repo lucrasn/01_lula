@@ -80,7 +80,7 @@ public class Disciplina {
         this.NOTA2 = n2;
         this.FREQUENCIA = f;
 
-        this.MEDIA = (this.NOTA1 + this.NOTA2)/ 2;
+        this.MEDIA = (this.NOTA1 + this.NOTA2) / 2;
 
         if (this.MEDIA >= 7) {
             this.FINAL = 0;
@@ -89,20 +89,19 @@ public class Disciplina {
         }
 
         while (boletim.size() <= aluno.getINDICE()) {
-            boletim.add(new ArrayList<ArrayList<String>>());
+            boletim.add(new ArrayList<>());
         }
 
-        while (boletim.get(aluno.getINDICE()).size() <= this.INDICE) {
-            boletim.get(aluno.getINDICE()).add(new ArrayList<String>());
-        }
+        ArrayList<String> dadosMateria = new ArrayList<>();
+        dadosMateria.add(this.nomeMateria);
+        dadosMateria.add(String.valueOf(this.NOTA1));
+        dadosMateria.add(String.valueOf(this.NOTA2));
+        dadosMateria.add(String.valueOf(this.FREQUENCIA));
+        dadosMateria.add(status());
 
-        boletim.get(aluno.getINDICE()).get(this.INDICE).add(this.nomeMateria);
-        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA1));
-        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.NOTA2));
-        boletim.get(aluno.getINDICE()).get(this.INDICE).add(String.valueOf(this.FREQUENCIA));
-        boletim.get(aluno.getINDICE()).get(this.INDICE).add(status());
+        boletim.get(aluno.getINDICE()).add(dadosMateria);
 
-        int incremento = disciplinasCount.get(aluno.getINDICE()) + 1;
+        int incremento = boletim.get(aluno.getINDICE()).size();
         disciplinasCount.set(aluno.getINDICE(), incremento);
     }
 
@@ -167,7 +166,7 @@ public class Disciplina {
 
         if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
             return false;
-        } else if (boletim.get(indiceAluno).get(i).getFirst().equalsIgnoreCase(consulta)) {
+        } else if (boletim.get(indiceAluno).get(i).get(0).equalsIgnoreCase(consulta)) {
             return true;
         } else {
             return materiaExiste(aluno, consulta, i + 1);
@@ -191,7 +190,7 @@ public class Disciplina {
 
         if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
             return "\nDisciplina não cadastrada!\n";
-        } else if (boletim.get(indiceAluno).get(i).getFirst().equalsIgnoreCase(consulta)) {
+        } else if (!boletim.get(indiceAluno).get(i).isEmpty() && boletim.get(indiceAluno).get(i).get(0).equalsIgnoreCase(consulta)) {
             return formatarVisualizacao(aluno, i);
         } else {
             return buscarMateria(aluno, consulta, i + 1);
@@ -209,13 +208,13 @@ public class Disciplina {
     private String status() {
         if (this.FREQUENCIA >= 75) {
             if (this.MEDIA >= 7) {
-                return String.format("Aprovado com média: %.2f", this.MEDIA);
+                return String.format("Aprovado com média %.2f", this.MEDIA);
             } else if (this.MEDIA >= 4) {
                 return String.format("Recuperação, " +
-                        "nota necessária para atingir a média: %.2f", this.FINAL);
+                        "nota necessária para atingir a média %.2f", this.FINAL);
             } else {
                 return "Reprovado por nota, "
-                        + String.format("média: %.2f", this.MEDIA);
+                        + String.format("média %.2f", this.MEDIA);
             }
         } else {
             return "Reprovado por falta";
@@ -258,7 +257,7 @@ public class Disciplina {
             for (int j = 0; j < numDisciplinas; j++) {
                 if (!boletim.get(i).get(j).isEmpty()) {
                     String linha =
-                            boletim.get(i).get(j).getFirst() + delimitadores[1] +
+                            boletim.get(i).get(j).get(0) + delimitadores[1] +
                                     boletim.get(i).get(j).get(1) + delimitadores[1] +
                                     boletim.get(i).get(j).get(2) + delimitadores[1] +
                                     boletim.get(i).get(j).get(3) + delimitadores[1] +
