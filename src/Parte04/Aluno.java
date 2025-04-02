@@ -20,7 +20,7 @@ public class Aluno {
         this.nome = null;
         this.matricula = null;
 
-        Disciplina.getCount().add(0);
+        Disciplina.getDisciplinasCount().add(0);
     }
 
     public Aluno(String nome, String matricula, int indice){
@@ -34,8 +34,8 @@ public class Aluno {
         this.nome = nome;
         this.matricula = matricula;
 
-        while (Disciplina.getCount().size() <= this.INDICE) {
-            Disciplina.getCount().add(0);
+        while (Disciplina.getDisciplinasCount().size() <= this.INDICE) {
+            Disciplina.getDisciplinasCount().add(0);
         }
 
         if (registro.size() <= alunoCount){
@@ -47,7 +47,6 @@ public class Aluno {
         }
 
         registro.set(alunoCount, this.nome + ";" + this.matricula);
-
 
         alunoCount++;
     }
@@ -150,7 +149,6 @@ public class Aluno {
      * @param delimitador Lista com dois tipos de delimitadores
      */
     public static void cadastrarAluno(String user, String nome, String senha, String delimitador) throws IOException {
-
         BufferedReader reader = new BufferedReader(new FileReader(user));
         String line;
 
@@ -175,7 +173,6 @@ public class Aluno {
     /*TODO: lembrar de que quando ler o registro de alunos adicionar a qnt de materias no alunoCount de Disciplinas*/
     public static void lerRegistroAlunos(String[] delimitadores, String user/*List<ArrayList<ArrayList<String>>> boletim*/) throws IOException {
         File archive = new File(user);
-
 
         if (!archive.exists()) {
             System.out.println("Arquivo de dados não encontrado: " + archive.getCanonicalPath());
@@ -246,7 +243,7 @@ public class Aluno {
         return INDICE;
     }
 
-    public static int getCount(){
+    public static int getAlunoCount(){
         return alunoCount;
     }
 }

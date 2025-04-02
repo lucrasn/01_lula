@@ -33,19 +33,20 @@ public class GerenciadorAvancadoOO {
                 Disciplina.getBoletim().add(new ArrayList<>());
             }
 
-            while (Disciplina.getCount().size() < numAlunos) {
-                Disciplina.getCount().add(0);
+            while (Disciplina.getDisciplinasCount().size() < numAlunos) {
+                Disciplina.getDisciplinasCount().add(0);
             }
 
         } catch (IOException e) {
             System.out.println("\nOcorreu um erro ao ler o registro: " + e.getMessage() + "\n");
         }
 
-        boolean flag = false;
-        while (!flag) {
+        boolean flag = true;
+        boolean flagSubFirst = true;
+        boolean flagSubLast = false;
+        while (flag) {
             Aluno aluno = null;
-            boolean cadastrado = false;
-            while (!cadastrado) {
+            while (flagSubFirst) {
                 entrar();
                 System.out.print("Digite o número correspondente: ");
                 int opcaoInicial = sc.nextInt();
@@ -65,10 +66,6 @@ public class GerenciadorAvancadoOO {
                                 try {
                                     Aluno.cadastrarAluno(USER, nome, matricula, DELIMITADOR[0]);
                                     aluno = new Aluno(nome, matricula);
-                                    aluno = Aluno.login(nome, matricula);
-                                    if (aluno != null) {
-                                        cadastrado = true;
-                                    }
                                 } catch (IOException e) {
                                     System.out.println("\nErro ao criar o registro: " + e.getMessage());
                                 }
@@ -92,15 +89,16 @@ public class GerenciadorAvancadoOO {
 
                             aluno = Aluno.login(nm, matricula);
                             if (aluno != null) {
-                                cadastrado = true;
+                                flagSubFirst = false;
+                                flagSubLast = true;
                             }
                         }
                         break;
 
                     case 3:
                         System.out.println("Até a próxima!");
-                        flag = true;
-                        cadastrado = false;
+                        flagSubFirst = false;
+                        flag = false;
                         break;
 
                     default:
@@ -108,13 +106,13 @@ public class GerenciadorAvancadoOO {
                 }
             }
 
-            while (cadastrado) {
+            while (flagSubLast) {
                 menu();
                 System.out.print("Digite o número correspondente: ");
                 int opcao = sc.nextInt();
                 sc.nextLine();
 
-                int nDisciplinasAluno = Disciplina.getCount().get(aluno.getINDICE());
+                int nDisciplinasAluno = Disciplina.getDisciplinasCount().get(aluno.getINDICE());
 
                 switch (opcao) {
                     case 1:
@@ -166,7 +164,8 @@ public class GerenciadorAvancadoOO {
                                 System.out.println("\nErro ao salvar histórico: " + e.getMessage());
                             }
                         }
-                        cadastrado = false;
+                        flagSubFirst = true;
+                        flagSubLast = false;
                         break;
 
                     default:

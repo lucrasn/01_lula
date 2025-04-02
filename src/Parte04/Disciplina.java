@@ -277,11 +277,10 @@ public class Disciplina {
      * @throws IOException Caso não encontre o arquivo txt
      */
     public static void lerHistoricoBoletim(String[] delimitadores, String path) throws IOException {
-        List<ArrayList<ArrayList<String>>> historico = new ArrayList<>();
-        File archive = new File(path);
-
         boletim.clear();
         disciplinasCount.clear();
+
+        File archive = new File(path);
 
         if (archive.exists()) {
             System.out.println("Arquivo de dados encontrado: " + archive.getCanonicalPath());
@@ -307,13 +306,13 @@ public class Disciplina {
 
                     historicoAluno.add(dadosMateria);
                 }
+
+                boletim.add(historicoAluno);
+
                 disciplinasCount.add(historicoAluno.size());
-                historico.add(historicoAluno);
             }
             reader.close();
         }
-
-        boletim = historico;
     }
 
     /**
@@ -345,9 +344,6 @@ public class Disciplina {
         }
     }
 
-    /* TODO:
-    *   criar um metodo para adicionar um elemento no @atributo disciplinasCount (ex: disciplinasCount.add(0))*/
-
     public static List<ArrayList<ArrayList<String>>> getBoletim() {
         return boletim;
     }
@@ -356,13 +352,16 @@ public class Disciplina {
      * Buscar todas as disciplinas
      */
     public static void getBoletimFormatado(Aluno aluno) {
-        List<ArrayList<String>> boletimAluno = boletim.get(aluno.getINDICE());
-        int numDisciplinas = disciplinasCount.get(aluno.getINDICE());
+        int indiceAluno = aluno.getINDICE();
 
-        for (int i = 0; i < numDisciplinas; i++) {
-            if(i < boletimAluno.size()){
+        if (indiceAluno < boletim.size()) {
+            int numDisciplinas = boletim.get(indiceAluno).size();
+
+            for (int i = 0; i < numDisciplinas; i++) {
                 System.out.print(formatarVisualizacao(aluno, i));
             }
+        } else {
+            System.out.println("\nNenhuma matéria cadastrada ou erro ao acessar disciplinas!\n");
         }
     }
 
@@ -370,7 +369,7 @@ public class Disciplina {
         Disciplina.boletim = boletim;
     }
 
-    public static List<Integer> getCount() {
+    public static List<Integer> getDisciplinasCount() {
         return disciplinasCount;
     }
 
