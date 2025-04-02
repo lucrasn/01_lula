@@ -275,7 +275,9 @@ public class Disciplina {
      * @throws IOException Caso não encontre o arquivo txt
      */
     public static void lerHistoricoBoletim(String[] delimitadores, String path) throws IOException {
-        List<ArrayList<ArrayList<String>>> historico = new ArrayList<>();
+        boletim.clear();
+        count.clear();
+
         File archive = new File(path);
 
         if (archive.exists()) {
@@ -301,12 +303,12 @@ public class Disciplina {
                     historicoAluno.add(dadosMateria);
                 }
 
-                historico.add(historicoAluno);
+                boletim.add(historicoAluno);
+
+                count.add(historicoAluno.size());
             }
             reader.close();
         }
-
-        boletim = historico;
     }
 
     /**
@@ -338,9 +340,6 @@ public class Disciplina {
         }
     }
 
-    /* TODO:
-    *   criar um metodo para adicionar um elemento no @atributo count (ex: count.add(0))*/
-
     public static List<ArrayList<ArrayList<String>>> getBoletim() {
         return boletim;
     }
@@ -349,8 +348,16 @@ public class Disciplina {
      * Buscar todas as disciplinas
      */
     public static void getBoletimFormatado(Aluno aluno) {
-        for (int i = 0; i < count.get(aluno.getINDICE()); i++) {
-            System.out.print(formatarVisualizacao(aluno, i));
+        int indiceAluno = aluno.getINDICE();
+
+        if (indiceAluno < boletim.size()) {
+            int numDisciplinas = boletim.get(indiceAluno).size();
+
+            for (int i = 0; i < numDisciplinas; i++) {
+                System.out.print(formatarVisualizacao(aluno, i));
+            }
+        } else {
+            System.out.println("\nNenhuma matéria cadastrada ou erro ao acessar disciplinas!\n");
         }
     }
 

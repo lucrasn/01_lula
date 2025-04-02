@@ -41,11 +41,12 @@ public class GerenciadorAvancadoOO {
             System.out.println("\nOcorreu um erro ao ler o registro: " + e.getMessage() + "\n");
         }
 
-        boolean flag = false;
-        while (!flag) {
+        boolean flag = true;
+        boolean flagSubFirst = true;
+        boolean flagSubLast = false;
+        while (flag) {
             Aluno aluno = null;
-            boolean cadastrado = false;
-            while (!cadastrado) {
+            while (flagSubFirst) {
                 entrar();
                 System.out.print("Digite o número correspondente: ");
                 int opcaoInicial = sc.nextInt();
@@ -88,15 +89,16 @@ public class GerenciadorAvancadoOO {
 
                             aluno = Aluno.login(nm, matricula);
                             if (aluno != null) {
-                                cadastrado = true;
+                                flagSubFirst = false;
+                                flagSubLast = true;
                             }
                         }
                         break;
 
                     case 3:
                         System.out.println("Até a próxima!");
-                        flag = true;
-                        cadastrado = false;
+                        flagSubFirst = false;
+                        flag = false;
                         break;
 
                     default:
@@ -104,7 +106,7 @@ public class GerenciadorAvancadoOO {
                 }
             }
 
-            while (cadastrado) {
+            while (flagSubLast) {
                 menu();
                 System.out.print("Digite o número correspondente: ");
                 int opcao = sc.nextInt();
@@ -162,7 +164,8 @@ public class GerenciadorAvancadoOO {
                                 System.out.println("\nErro ao salvar histórico: " + e.getMessage());
                             }
                         }
-                        cadastrado = false;
+                        flagSubFirst = true;
+                        flagSubLast = false;
                         break;
 
                     default:
