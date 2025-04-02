@@ -366,7 +366,6 @@ public class Disciplina {
         }
     }
 
-
     public static void setBoletim(List<ArrayList<ArrayList<String>>> boletim) {
         Disciplina.boletim = boletim;
     }
