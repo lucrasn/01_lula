@@ -11,9 +11,6 @@ public class Aluno {
     private final String matricula;
     private final int INDICE;
 
-    public String getNome(){
-        return this.nome;
-    }
 
     public Aluno() {
         this.INDICE = alunoCount;
@@ -39,10 +36,8 @@ public class Aluno {
         }
 
         if (registro.size() <= alunoCount){
-            // Se o índice não existir, só adiciona o aluno na posição correta
-            // Ao invés de linhas vazias, a lista é expandida diretamente com o novo aluno.
             for (int i = registro.size(); i <= alunoCount; i++) {
-                registro.add("");  // Adiciona linhas vazias até o índice correto, mas de forma controlada.
+                registro.add("");
             }
         }
 
@@ -232,6 +227,10 @@ public class Aluno {
 
     public static List<String> getRegistro() {
         return registro;
+    }
+
+    public String getNome(){
+        return this.nome;
     }
 
     public String getMatricula() {

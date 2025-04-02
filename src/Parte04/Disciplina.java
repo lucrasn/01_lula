@@ -161,7 +161,7 @@ public class Disciplina {
      * @param i índice do qual compararemos o nome da materia do boletim com a consulta
      * @return valor booleano -> true se achou e false se não
      */
-    public static boolean materiaExiste(Aluno aluno, String consulta, int i) {
+    private static boolean materiaExiste(Aluno aluno, String consulta, int i) {
         int indiceAluno = aluno.getINDICE();
 
         if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
@@ -185,7 +185,7 @@ public class Disciplina {
      * @param i índice do qual compararemos o nome da materia do boletim com a consulta
      * @return formatarVisualizacao da materia caso seja achado a materia
      */
-    public static String buscarMateria(Aluno aluno, String consulta, int i) {
+    private static String buscarMateria(Aluno aluno, String consulta, int i) {
         int indiceAluno = aluno.getINDICE();
 
         if (indiceAluno >= boletim.size() || i >= boletim.get(indiceAluno).size()) {
@@ -354,11 +354,6 @@ public class Disciplina {
             disciplinasCount.add(0);
         }
     }
-
-    public static List<ArrayList<ArrayList<String>>> getBoletim() {
-        return boletim;
-    }
-
     /**
      * Buscar todas as disciplinas
      */
@@ -375,6 +370,11 @@ public class Disciplina {
             System.out.println("\nNenhuma matéria cadastrada ou erro ao acessar disciplinas!\n");
         }
     }
+
+    public static List<ArrayList<ArrayList<String>>> getBoletim() {
+        return boletim;
+    }
+
 
     public static void setBoletim(List<ArrayList<ArrayList<String>>> boletim) {
         Disciplina.boletim = boletim;
