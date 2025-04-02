@@ -293,11 +293,13 @@ public class Disciplina {
             while ((line = reader.readLine()) != null) {
                 ArrayList<ArrayList<String>> historicoAluno = new ArrayList<>();
 
-                String[] materias = line.split(delimitadores[0]);
+                if(line.trim().isEmpty()) continue;
 
+                String[] materias = line.split(delimitadores[0]);
 
                 for (String dados : materias) {
                     String[] atributos = dados.split(delimitadores[1]);
+
                     if (atributos.length >= 5) {
                         ArrayList<String> dadosMateria = new ArrayList<>();
 
@@ -307,9 +309,8 @@ public class Disciplina {
                         dadosMateria.add(atributos[3]);
                         dadosMateria.add(atributos[4]);
 
-
                         historicoAluno.add(dadosMateria);
-                    }else {
+                    } else {
                         System.out.println("Linha inválida ignorada: " + line);
                     }
                 }
@@ -330,24 +331,27 @@ public class Disciplina {
      * @throws IOException Caso não encontre o arquivo txt
      */
     public static void pegarNumeroDeMateriasHistoricoBoletim(String delimitador, String path) throws IOException {
+        disciplinasCount.clear();
         File archive = new File(path);
-        int nAlunos = 0;
 
         if (archive.exists()) {
             BufferedReader reader = new BufferedReader(new FileReader(archive));
-
             String line;
+
             while ((line = reader.readLine()) != null) {
-                int nMaterias = line.split(delimitador).length;
-
-                while (disciplinasCount.size() <= nAlunos) {
+                if (line.trim().isEmpty()) {
                     disciplinasCount.add(0);
+                } else {
+                    String[] materias = line.split(delimitador);
+                    disciplinasCount.add(materias.length);
                 }
-
-                disciplinasCount.set(nAlunos, nMaterias);
-                nAlunos++;
             }
             reader.close();
+        }
+
+        int totalAlunos = Aluno.getAlunoCount();
+        while (disciplinasCount.size() < totalAlunos) {
+            disciplinasCount.add(0);
         }
     }
 

@@ -170,8 +170,7 @@ public class Aluno {
 
     }
 
-    /*TODO: lembrar de que quando ler o registro de alunos adicionar a qnt de materias no alunoCount de Disciplinas*/
-    public static void lerRegistroAlunos(String[] delimitadores, String user/*List<ArrayList<ArrayList<String>>> boletim*/) throws IOException {
+    public static void lerRegistroAlunos(String[] delimitadores, String user) throws IOException {
         File archive = new File(user);
 
         if (!archive.exists()) {
@@ -179,7 +178,7 @@ public class Aluno {
             return;
         }
 
-        registro.clear();  // limpa antes de carregar novos dados
+        registro.clear();
 
         System.out.println("Arquivo de dados encontrado: " + archive.getCanonicalPath());
         BufferedReader reader = new BufferedReader(new FileReader(archive));
@@ -188,7 +187,7 @@ public class Aluno {
         while ((line = reader.readLine()) != null) {
             String[] atributos = line.split(delimitadores[0]);
 
-            if (atributos.length >= 2) {  // garante que tem nome e matrícula
+            if (atributos.length >= 2) {
                 registro.add(atributos[0] + ";" + atributos[1]);
             } else {
                 System.out.println("Linha inválida ignorada: " + line);
