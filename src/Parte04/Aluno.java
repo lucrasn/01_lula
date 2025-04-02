@@ -196,8 +196,8 @@ public class Aluno {
     /**
      * Pegar a quantidade de alunos cadastrador no registro (arquivo .txt)
      *
-     * @param user
-     * @return
+     * @param user O caminho até o arquivo onde está armazenado os alunos
+     * @return O número de alunos no registro
      */
     public static int pegarLinhasRegistroDeAlunos(String user) throws IOException {
         int n = 0;
